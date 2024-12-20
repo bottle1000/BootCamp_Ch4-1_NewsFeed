@@ -5,9 +5,9 @@ import lombok.Getter;
 
 @Getter
 @Entity
-public class User {
+public class User extends BaseEntity {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @Column(name = "name")
@@ -20,10 +20,10 @@ public class User {
     private String password;
 
     @Column(name = "phone_number")
-    private String phone_number;
+    private String phoneNumber;
 
     @Column(name = "profile_picture")
-    private String profile_picture;
+    private String profilePicture;
 }
 
 

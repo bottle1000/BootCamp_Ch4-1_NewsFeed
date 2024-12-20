@@ -7,15 +7,15 @@ import lombok.Getter;
 @Getter
 public class Relationship {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "follower_id")
     private User follower;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "following_id")
     private User following;
 
 }
