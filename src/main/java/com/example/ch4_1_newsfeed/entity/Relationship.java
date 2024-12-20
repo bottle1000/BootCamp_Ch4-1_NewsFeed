@@ -14,5 +14,8 @@ public class Relationship {
     @JoinColumn(name = "user_id")
     private User follower;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User following;
 
 }
