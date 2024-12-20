@@ -1,4 +1,4 @@
 package com.example.ch4_1_newsfeed.service;
 
-public class FeedService {
+public class FeedServiceJ {
 }
