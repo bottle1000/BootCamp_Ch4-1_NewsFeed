@@ -19,14 +19,20 @@ public class UserController {
 
     private final UserService userService;
 
+    /**
+     * 로그인 기능
+     * @param loginRequest : userEmail, userPassword
+     * @param session
+     * @return
+     */
     @PostMapping("/login")
     public ResponseEntity<UserDto> login(@RequestBody LoginRequest loginRequest, HttpSession session) {
 
-        Long userId = userService.getUserId(loginRequest);
+        UserDto userDto = userService.getUserId(loginRequest);
 
-        session.setAttribute("userId", userId);
+        session.setAttribute("userId", userDto.getId());
 
-        return new ResponseEntity<>(userId, HttpStatus.OK);
+        return new ResponseEntity<>(userDto, HttpStatus.OK);
     }
 
 
