@@ -1,7 +1,6 @@
-package com.example.ch4_1_newsfeed.controller;
+package com.example.ch4_1_newsfeed.dto.user;
 
 import com.example.ch4_1_newsfeed.entity.User;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter

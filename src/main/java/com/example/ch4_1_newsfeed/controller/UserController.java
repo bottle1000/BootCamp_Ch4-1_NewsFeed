@@ -1,7 +1,10 @@
 package com.example.ch4_1_newsfeed.controller;
 
 
+import com.example.ch4_1_newsfeed.dto.user.UserDto;
+import com.example.ch4_1_newsfeed.dto.user.UserSignUpDto;
 import com.example.ch4_1_newsfeed.request.LoginRequest;
+import com.example.ch4_1_newsfeed.request.SignUpRequest;
 import com.example.ch4_1_newsfeed.service.UserService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -33,6 +36,13 @@ public class UserController {
         session.setAttribute("userId", userDto.getId());
 
         return new ResponseEntity<>(userDto, HttpStatus.OK);
+    }
+
+    @PostMapping("/singup")
+    public ResponseEntity<UserSignUpDto> createUser(@RequestBody SignUpRequest signUpRequest) {
+        UserSignUpDto userSignUpDto = userService.createUser(signUpRequest);
+
+        return new ResponseEntity<>(userSignUpDto, HttpStatus.OK);
     }
 
 
