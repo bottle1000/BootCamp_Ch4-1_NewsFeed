@@ -1,6 +1,7 @@
 package com.example.ch4_1_newsfeed.entity;
 
 import com.example.ch4_1_newsfeed.request.SignUpRequest;
+import com.example.ch4_1_newsfeed.request.UpdatePasswordRequest;
 import com.example.ch4_1_newsfeed.request.UpdateUserRequest;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -54,6 +55,12 @@ public class User extends BaseEntity {
 
         if (request.getPictureUrl() != null) {
             this.profilePicture = request.getPictureUrl();
+        }
+    }
+
+    public void updateUserPassword(UpdatePasswordRequest request) {
+        if (request.getPassword() != null) {
+            this.password = request.getPassword();
         }
     }
 }

@@ -7,6 +7,7 @@ import com.example.ch4_1_newsfeed.dto.user.UserSignUpDto;
 import com.example.ch4_1_newsfeed.dto.user.UserUpdateDto;
 import com.example.ch4_1_newsfeed.request.LoginRequest;
 import com.example.ch4_1_newsfeed.request.SignUpRequest;
+import com.example.ch4_1_newsfeed.request.UpdatePasswordRequest;
 import com.example.ch4_1_newsfeed.request.UpdateUserRequest;
 import com.example.ch4_1_newsfeed.service.UserService;
 import jakarta.servlet.http.HttpSession;
@@ -68,5 +69,16 @@ public class UserController {
         UserUpdateDto userUpdateDto = userService.updateMyProfile(userId, request);
 
         return new ResponseEntity<>(userUpdateDto, HttpStatus.OK);
+    }
+
+    /**
+     * 비밀번호 수정
+     */
+    @PutMapping("/me/password")
+    public ResponseEntity<Void> updateMyPassword(HttpSession session, UpdatePasswordRequest request) {
+        Long userId = (Long) session.getAttribute("userId");
+        userService.updateMyPassword(userId, request);
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
