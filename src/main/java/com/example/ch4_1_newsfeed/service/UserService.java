@@ -63,4 +63,11 @@ public class UserService {
                 .orElseThrow(() -> new IllegalStateException("내 정보가 존재하지 않습니다."));
         user.updateUserPassword(request);
     }
+
+    public ProfileDto getUserProfile(Long id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new IllegalStateException("찾으시는 사용자가 존재하지 않습니다."));
+        List<Feed> feedList = feedRepository.findAllByUserId(user.getId());
+        return ProfileDto.from(user, feedList);
+    }
 }

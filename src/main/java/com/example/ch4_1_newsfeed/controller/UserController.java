@@ -81,4 +81,15 @@ public class UserController {
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    /**
+     * 다른 유저 프로필 조회
+     */
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ProfileDto> getUserProfile(@PathVariable Long id) {
+        ProfileDto userProfile = userService.getUserProfile(id);
+
+        return new ResponseEntity<>(userProfile, HttpStatus.OK);
+    }
 }
