@@ -8,10 +8,7 @@ import com.example.ch4_1_newsfeed.entity.Feed;
 import com.example.ch4_1_newsfeed.entity.User;
 import com.example.ch4_1_newsfeed.repository.FeedRepository;
 import com.example.ch4_1_newsfeed.repository.UserRepository;
-import com.example.ch4_1_newsfeed.request.LoginRequest;
-import com.example.ch4_1_newsfeed.request.SignUpRequest;
-import com.example.ch4_1_newsfeed.request.UpdatePasswordRequest;
-import com.example.ch4_1_newsfeed.request.UpdateUserRequest;
+import com.example.ch4_1_newsfeed.request.*;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -69,5 +66,15 @@ public class UserService {
                 .orElseThrow(() -> new IllegalStateException("찾으시는 사용자가 존재하지 않습니다."));
         List<Feed> feedList = feedRepository.findAllByUserId(user.getId());
         return ProfileDto.from(user, feedList);
+    }
+
+    public void deleteUser(Long userId, DeleteUserRequest request) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalStateException("내 정보가 존재하지 않습니다."));
+
+        if (user.getPassword() != request.getPassword()) {
+            throw new IllegalStateException("비밀번호가 일치하지 않습니다.");
+        }
+        userRepository.delete(user);
     }
 }

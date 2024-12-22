@@ -5,10 +5,7 @@ import com.example.ch4_1_newsfeed.dto.user.ProfileDto;
 import com.example.ch4_1_newsfeed.dto.user.UserDto;
 import com.example.ch4_1_newsfeed.dto.user.UserSignUpDto;
 import com.example.ch4_1_newsfeed.dto.user.UserUpdateDto;
-import com.example.ch4_1_newsfeed.request.LoginRequest;
-import com.example.ch4_1_newsfeed.request.SignUpRequest;
-import com.example.ch4_1_newsfeed.request.UpdatePasswordRequest;
-import com.example.ch4_1_newsfeed.request.UpdateUserRequest;
+import com.example.ch4_1_newsfeed.request.*;
 import com.example.ch4_1_newsfeed.service.UserService;
 import jakarta.servlet.http.HttpSession;
 import lombok.Getter;
@@ -91,5 +88,16 @@ public class UserController {
         ProfileDto userProfile = userService.getUserProfile(id);
 
         return new ResponseEntity<>(userProfile, HttpStatus.OK);
+    }
+
+    /**
+     * 회원 탈퇴
+     */
+    @DeleteMapping("/me")
+    public ResponseEntity<String> deleteUser(DeleteUserRequest request, HttpSession session) {
+        Long userId = (Long) session.getAttribute("userId");
+        userService.deleteUser(userId, request);
+
+        return ResponseEntity.ok("성공적으로 탈퇴 되었습니다.");
     }
 }
