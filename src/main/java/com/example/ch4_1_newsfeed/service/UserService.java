@@ -3,12 +3,14 @@ package com.example.ch4_1_newsfeed.service;
 import com.example.ch4_1_newsfeed.dto.user.ProfileDto;
 import com.example.ch4_1_newsfeed.dto.user.UserDto;
 import com.example.ch4_1_newsfeed.dto.user.UserSignUpDto;
+import com.example.ch4_1_newsfeed.dto.user.UserUpdateDto;
 import com.example.ch4_1_newsfeed.entity.Feed;
 import com.example.ch4_1_newsfeed.entity.User;
 import com.example.ch4_1_newsfeed.repository.FeedRepository;
 import com.example.ch4_1_newsfeed.repository.UserRepository;
 import com.example.ch4_1_newsfeed.request.LoginRequest;
 import com.example.ch4_1_newsfeed.request.SignUpRequest;
+import com.example.ch4_1_newsfeed.request.UpdateUserRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -42,5 +44,13 @@ public class UserService {
         List<Feed> feedList = feedRepository.findAllByUserId(user.getId());
 
         return ProfileDto.from(user, feedList);
+    }
+
+    public UserUpdateDto updateMyProfile(Long userId, UpdateUserRequest request) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalStateException("내 정보가 존재하지 않습니다."));
+        user.updateUser(request);
+
+        return UserUpdateDto.from(user);
     }
 }

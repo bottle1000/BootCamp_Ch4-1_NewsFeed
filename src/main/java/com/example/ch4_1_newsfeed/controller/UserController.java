@@ -4,8 +4,10 @@ package com.example.ch4_1_newsfeed.controller;
 import com.example.ch4_1_newsfeed.dto.user.ProfileDto;
 import com.example.ch4_1_newsfeed.dto.user.UserDto;
 import com.example.ch4_1_newsfeed.dto.user.UserSignUpDto;
+import com.example.ch4_1_newsfeed.dto.user.UserUpdateDto;
 import com.example.ch4_1_newsfeed.request.LoginRequest;
 import com.example.ch4_1_newsfeed.request.SignUpRequest;
+import com.example.ch4_1_newsfeed.request.UpdateUserRequest;
 import com.example.ch4_1_newsfeed.service.UserService;
 import jakarta.servlet.http.HttpSession;
 import lombok.Getter;
@@ -13,10 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequiredArgsConstructor
@@ -58,5 +57,16 @@ public class UserController {
         ProfileDto myProfile = userService.getMyProfile(userId);
 
         return new ResponseEntity<>(myProfile, HttpStatus.OK);
+    }
+
+    /**
+     * 내 프로필 수정
+     */
+    @PutMapping("/me")
+    public ResponseEntity<UserUpdateDto> updateMyProfile(HttpSession session, UpdateUserRequest request) {
+        Long userId = (Long) session.getAttribute("userId");
+        UserUpdateDto userUpdateDto = userService.updateMyProfile(userId, request);
+
+        return new ResponseEntity<>(userUpdateDto, HttpStatus.OK);
     }
 }
