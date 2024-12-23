@@ -111,21 +111,6 @@ public class RequestExceptionWrapperAOP {
     }
 
     /**
-     * 인가 처리를 필터에서 일괄적으로 수행할 경우 없어질 기능
-     *
-     * @param e
-     */
-    @AfterThrowing(
-        pointcut = "execution(* com.example.ch4_1_newsfeed.controller.*(..))"
-            + "execution(* com.example.ch4_1_newsfeed.service.*(..))"
-            + "execution(* com.example.ch4_1_newsfeed.repository.*(..))",
-        throwing = "e"
-    )
-    public void wrapNotAuthorizedException(NotAuthorizedException e) {
-        throw new ResponseException("권한이 없습니다.", HttpStatus.FORBIDDEN);
-    }
-
-    /**
      * @param e mvc 모델 상에서 나머지 예외들을 일괄적으로 처리
      */
 
