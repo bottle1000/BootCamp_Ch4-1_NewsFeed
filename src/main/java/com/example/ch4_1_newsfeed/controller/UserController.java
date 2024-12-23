@@ -28,14 +28,13 @@ public class UserController {
     @PostMapping("/login")
     public ResponseEntity<UserResponseDto> login(@RequestBody LoginUserRequestDto loginRequest, HttpSession session) {
 
-        UserResponseDto userDto = userService.getUserId(loginRequest);
-
+        UserResponseDto userDto = userService.loginUser(loginRequest);
         session.setAttribute("userId", userDto.getId());
 
         return new ResponseEntity<>(userDto, HttpStatus.OK);
     }
 
-    @PostMapping("/singup")
+    @PostMapping("/signup")
     public ResponseEntity<SignUpUserResponseDto> createUser(@RequestBody SignUpUserRequestDto signUpRequest) {
         SignUpUserResponseDto userSignUpDto = userService.createUser(signUpRequest);
 
