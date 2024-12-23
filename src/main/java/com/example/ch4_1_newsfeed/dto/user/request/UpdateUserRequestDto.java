@@ -1,9 +1,9 @@
-package com.example.ch4_1_newsfeed.request;
+package com.example.ch4_1_newsfeed.dto.user.request;
 
 import lombok.Getter;
 
 @Getter
-public class UpdateUserRequest {
+public class UpdateUserRequestDto {
 
     private String name;
     private String pictureUrl;
