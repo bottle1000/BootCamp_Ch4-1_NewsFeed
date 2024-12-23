@@ -6,9 +6,11 @@ import com.example.ch4_1_newsfeed.dto.user.request.UpdateUserRequestDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
+@NoArgsConstructor
 @AllArgsConstructor
 public class User extends BaseEntity {
     @Id
@@ -29,10 +31,6 @@ public class User extends BaseEntity {
 
     @Column(name = "profile_picture")
     private String profilePicture;
-
-    public User() {
-
-    }
 
     public static User createUser(SignUpUserRequestDto request) {
         return new User(
