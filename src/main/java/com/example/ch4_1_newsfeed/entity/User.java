@@ -1,14 +1,22 @@
 package com.example.ch4_1_newsfeed.entity;
 
+import com.example.ch4_1_newsfeed.request.SignUpRequest;
+import com.example.ch4_1_newsfeed.request.UpdatePasswordRequest;
+import com.example.ch4_1_newsfeed.request.UpdateUserRequest;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Entity
+@AllArgsConstructor
 public class User extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @Column(name = "name")
     private String name;
@@ -24,6 +32,37 @@ public class User extends BaseEntity {
 
     @Column(name = "profile_picture")
     private String profilePicture;
+
+    public User() {
+
+    }
+
+    public static User createUser(SignUpRequest request) {
+        return new User(
+                null,
+                request.getName(),
+                request.getEmail(),
+                request.getPassword(),
+                request.getPhoneNumber(),
+                request.getPictureUrl()
+        );
+    }
+
+    public void updateUser(UpdateUserRequest request) {
+        if (request.getName() != null) {
+            this.name = request.getName();
+        }
+
+        if (request.getPictureUrl() != null) {
+            this.profilePicture = request.getPictureUrl();
+        }
+    }
+
+    public void updateUserPassword(UpdatePasswordRequest request) {
+        if (request.getPassword() != null) {
+            this.password = request.getPassword();
+        }
+    }
 }
 
 
