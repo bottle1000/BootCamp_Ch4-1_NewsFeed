@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 
 /**
  * mvc 에서 던져지는 예외를 응답 형식에 맞게 표준화하는 wrapper
- *
+ * 또한 각 예외 별 상황을 클라이언트도 적당히 알 수 있도록 함
  */
 @Aspect
 @Component
@@ -22,6 +22,7 @@ public class RequestExceptionWrapperAOP {
     /**
      * Valid 검증 실패한 경우에 대해 예외 래핑
      * 실패한 모든 Validation에 대한 메시지들을 출력
+     *
      * @param e
      */
     @AfterThrowing(
@@ -37,6 +38,7 @@ public class RequestExceptionWrapperAOP {
 
     /**
      * RequestBody 등으로 변환할 입력 값의 타입이 맞지 않는 경우에 대한 예외 래핑
+     *
      * @param e
      */
     @AfterThrowing(
@@ -49,6 +51,7 @@ public class RequestExceptionWrapperAOP {
 
     /**
      * IllegalStateException 이 여러 상황에 사용될 수 있는 것을 고려해 이에 맞는 형식의 응답을 반환할 수 있도록 함
+     *
      * @param e
      */
     @AfterThrowing(
@@ -67,6 +70,7 @@ public class RequestExceptionWrapperAOP {
 
     /**
      * 쿼리 실행 중 데이터 일관성 문제가 발생한 경우에 대한 예외 래핑
+     *
      * @param e
      */
     @AfterThrowing(
@@ -80,6 +84,7 @@ public class RequestExceptionWrapperAOP {
     /**
      * 데이터 조회 결과가 존재하지 않는 경우에 대한 예외 래핑
      * 빈 리스트를 반환하는 경우에도
+     *
      * @param e
      */
     @AfterThrowing(
@@ -93,6 +98,7 @@ public class RequestExceptionWrapperAOP {
     /**
      * 데이터 조회 결과가 예상보다 많은 케이스에 대해 별도로 래핑
      * 예: 단일 조회 쿼리 수행 결과로 2개 이상의 row가 조회된 경우
+     *
      * @param e
      */
 
@@ -106,6 +112,7 @@ public class RequestExceptionWrapperAOP {
 
     /**
      * 인가 처리를 필터에서 일괄적으로 수행할 경우 없어질 기능
+     *
      * @param e
      */
     @AfterThrowing(
@@ -119,9 +126,7 @@ public class RequestExceptionWrapperAOP {
     }
 
     /**
-     *
-     * @param e
-     * mvc 모델 상에서 나머지 예외들을 일괄적으로 처리
+     * @param e mvc 모델 상에서 나머지 예외들을 일괄적으로 처리
      */
 
     @AfterThrowing(
