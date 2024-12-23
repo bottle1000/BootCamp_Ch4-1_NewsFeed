@@ -1,14 +1,10 @@
 package com.example.ch4_1_newsfeed.controller;
 
 
-import com.example.ch4_1_newsfeed.dto.user.ProfileDto;
-import com.example.ch4_1_newsfeed.dto.user.UserDto;
-import com.example.ch4_1_newsfeed.dto.user.UserSignUpDto;
-import com.example.ch4_1_newsfeed.dto.user.UserUpdateDto;
-import com.example.ch4_1_newsfeed.request.*;
+import com.example.ch4_1_newsfeed.dto.user.response.*;
+import com.example.ch4_1_newsfeed.dto.user.request.*;
 import com.example.ch4_1_newsfeed.service.UserService;
 import jakarta.servlet.http.HttpSession;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,9 +26,9 @@ public class UserController {
      * @return
      */
     @PostMapping("/login")
-    public ResponseEntity<UserDto> login(@RequestBody LoginRequest loginRequest, HttpSession session) {
+    public ResponseEntity<UserResponseDto> login(@RequestBody LoginUserRequestDto loginRequest, HttpSession session) {
 
-        UserDto userDto = userService.getUserId(loginRequest);
+        UserResponseDto userDto = userService.getUserId(loginRequest);
 
         session.setAttribute("userId", userDto.getId());
 
@@ -40,8 +36,8 @@ public class UserController {
     }
 
     @PostMapping("/singup")
-    public ResponseEntity<UserSignUpDto> createUser(@RequestBody SignUpRequest signUpRequest) {
-        UserSignUpDto userSignUpDto = userService.createUser(signUpRequest);
+    public ResponseEntity<SignUpUserResponseDto> createUser(@RequestBody SignUpUserRequestDto signUpRequest) {
+        SignUpUserResponseDto userSignUpDto = userService.createUser(signUpRequest);
 
         return new ResponseEntity<>(userSignUpDto, HttpStatus.OK);
     }
@@ -50,9 +46,9 @@ public class UserController {
      * 내 프로필 조회
      */
     @GetMapping("/me")
-    public ResponseEntity<ProfileDto> getMyProfile(HttpSession session) {
+    public ResponseEntity<ProfileUserResponseDto> getMyProfile(HttpSession session) {
         Long userId = (Long) session.getAttribute("userId");
-        ProfileDto myProfile = userService.getMyProfile(userId);
+        ProfileUserResponseDto myProfile = userService.getMyProfile(userId);
 
         return new ResponseEntity<>(myProfile, HttpStatus.OK);
     }
@@ -61,9 +57,9 @@ public class UserController {
      * 내 프로필 수정
      */
     @PutMapping("/me")
-    public ResponseEntity<UserUpdateDto> updateMyProfile(HttpSession session, UpdateUserRequest request) {
+    public ResponseEntity<UpdateUserResponseDto> updateMyProfile(HttpSession session, UpdateUserRequestDto request) {
         Long userId = (Long) session.getAttribute("userId");
-        UserUpdateDto userUpdateDto = userService.updateMyProfile(userId, request);
+        UpdateUserResponseDto userUpdateDto = userService.updateMyProfile(userId, request);
 
         return new ResponseEntity<>(userUpdateDto, HttpStatus.OK);
     }
@@ -72,7 +68,7 @@ public class UserController {
      * 비밀번호 수정
      */
     @PutMapping("/me/password")
-    public ResponseEntity<Void> updateMyPassword(HttpSession session, UpdatePasswordRequest request) {
+    public ResponseEntity<Void> updateMyPassword(HttpSession session, UpdatePasswordUserRequestDto request) {
         Long userId = (Long) session.getAttribute("userId");
         userService.updateMyPassword(userId, request);
 
@@ -84,8 +80,8 @@ public class UserController {
      */
 
     @GetMapping("/{id}")
-    public ResponseEntity<ProfileDto> getUserProfile(@PathVariable Long id) {
-        ProfileDto userProfile = userService.getUserProfile(id);
+    public ResponseEntity<ProfileUserResponseDto> getUserProfile(@PathVariable Long id) {
+        ProfileUserResponseDto userProfile = userService.getUserProfile(id);
 
         return new ResponseEntity<>(userProfile, HttpStatus.OK);
     }
@@ -94,7 +90,7 @@ public class UserController {
      * 회원 탈퇴
      */
     @DeleteMapping("/me")
-    public ResponseEntity<String> deleteUser(DeleteUserRequest request, HttpSession session) {
+    public ResponseEntity<String> deleteUser(DeleteUserRequestDto request, HttpSession session) {
         Long userId = (Long) session.getAttribute("userId");
         userService.deleteUser(userId, request);
 
