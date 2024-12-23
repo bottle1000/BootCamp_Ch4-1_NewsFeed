@@ -25,6 +25,11 @@ public class GlobalExceptionHandler {
         return ExceptionMessage.UNAUTHORIZED.getStringResponse();
     }
 
+    @ExceptionHandler(ForbiddenRequestException.class)
+    public ResponseEntity<Map<String, String>> handleForbidden(Exception e) {
+        return ExceptionMessage.FORBIDDEN.getStringResponse();
+    }
+
     // 하위의 클래스들부터 먼저 예외처리가 적용됨
     @ExceptionHandler(EmptyResultDataAccessException.class)
     public ResponseEntity<Map<String, String>> handleNotFound(Exception e) {
