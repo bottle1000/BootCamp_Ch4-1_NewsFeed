@@ -19,14 +19,14 @@ public class FeedServiceJ {
 
         User findUser = userRepository.findUserByUsernameOrElseThrow(name);
 
-        Feed feed = new Feed(contents);
-        feed.setUser(findUser);
+        Feed feed = new Feed(contents, findUser);
 
         feedRepository.save(feed);
 
 
         return new FeedResponseDto(
                 feed.getId(),
+                findUser.getName(),
                 feed.getContents(),
                 feed.getCreatedAt());
 
