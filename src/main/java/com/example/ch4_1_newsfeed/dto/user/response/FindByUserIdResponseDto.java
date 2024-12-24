@@ -3,7 +3,6 @@ package com.example.ch4_1_newsfeed.dto.user.response;
 import com.example.ch4_1_newsfeed.entity.Photo;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-
 import java.time.LocalDateTime;
 import java.util.List;
 
