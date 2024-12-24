@@ -1,10 +1,13 @@
 package com.example.ch4_1_newsfeed.service;
 
+import com.example.ch4_1_newsfeed.dto.user.request.ModifyFeedRequestDto;
 import com.example.ch4_1_newsfeed.dto.user.response.FindAllFeedResponseDto;
 import com.example.ch4_1_newsfeed.dto.user.response.FindByUserAndFeedIdResponseDto;
 import com.example.ch4_1_newsfeed.dto.user.response.FindByUserIdResponseDto;
+import com.example.ch4_1_newsfeed.dto.user.response.ModifyFeedResponseDto;
 import com.example.ch4_1_newsfeed.entity.Feed;
 import com.example.ch4_1_newsfeed.repository.FeedRepository;
+import com.example.ch4_1_newsfeed.repository.FeedRepositoryImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +18,7 @@ import java.util.List;
 public class FeedServiceT {
 
     private final FeedRepository feedRepository;
+    private final FeedRepositoryImpl feedRepositoryImpl;
 
     /**
      * 모든 피드 조회<br>
@@ -62,5 +66,17 @@ public class FeedServiceT {
                 byIdAndId.getPhoto(),
                 byIdAndId.getCreatedAt()
         );
+    }
+
+    /**
+     * 피드 수정
+     */
+    public ModifyFeedRequestDto modifyFeedResponse(ModifyFeedRequestDto modifyFeedRequestDto) {
+        Feed feed = feedRepositoryImpl.modifyFeed(modifyFeedRequestDto.getUserId(), modifyFeedRequestDto.getFeedId());
+
+        feed.updateFeed(modifyFeedRequestDto.getDescription(), modifyFeedRequestDto.getPhotos());
+
+        return
+
     }
 }

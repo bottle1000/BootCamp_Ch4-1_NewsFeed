@@ -49,6 +49,13 @@ public class FeedControllerT {
         FindByUserAndFeedIdResponseDto responseDtos = feedServiceT.findByUserAndFeed(user_id, feed_id);
 
         return new ResponseEntity(responseDtos, HttpStatus.OK);
+    }
+
+    /**
+     * 피드 수정
+     */
+    @PutMapping("/{id}")
+    public ResponseEntity modifyFeed() {
 
     }
 }
