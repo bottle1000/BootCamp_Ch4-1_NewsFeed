@@ -1,9 +1,7 @@
 package com.example.ch4_1_newsfeed.exception;
 
 import lombok.extern.slf4j.Slf4j;
-import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.AfterThrowing;
-import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -30,7 +28,7 @@ public class RequestExceptionWrapperAOP {
      * @param e
      */
     @AfterThrowing(
-        pointcut = "execution(* com.example.ch4_1_newsfeed.controller.*(..))",
+        pointcut = "execution(* com.example.ch4_1_newsfeed.controller.*.*(..))",
         throwing = "e"
     )
     public void wrapMethodArgumentNotValidException(MethodArgumentNotValidException e) {
@@ -46,7 +44,7 @@ public class RequestExceptionWrapperAOP {
      * @param e
      */
     @AfterThrowing(
-        pointcut = "execution(* com.example.ch4_1_newsfeed.controller.*(..))",
+        pointcut = "execution(* com.example.ch4_1_newsfeed.controller.*.*(..))",
         throwing = "e"
     )
     public void wrapMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException e) {
@@ -79,7 +77,7 @@ public class RequestExceptionWrapperAOP {
      * @param e
      */
     @AfterThrowing(
-        pointcut = "execution(* com.example.ch4_1_newsfeed.repository.*(..))",
+        pointcut = "execution(* com.example.ch4_1_newsfeed.repository.*.*(..))",
         throwing = "e"
     )
     public void wrapDataIntegrityViolationException(DataIntegrityViolationException e) {
@@ -93,7 +91,7 @@ public class RequestExceptionWrapperAOP {
      * @param e
      */
     @AfterThrowing(
-        pointcut = "execution(* com.example.ch4_1_newsfeed.repository.*(..))",
+        pointcut = "execution(* com.example.ch4_1_newsfeed.repository.*.*(..))",
         throwing = "e"
     )
     public void wrapEmptyResultDataAccessException(EmptyResultDataAccessException e) {
@@ -108,7 +106,7 @@ public class RequestExceptionWrapperAOP {
      */
 
     @AfterThrowing(
-        pointcut = "execution(* com.example.ch4_1_newsfeed.repository.*(..))",
+        pointcut = "execution(* com.example.ch4_1_newsfeed.repository.*.*(..))",
         throwing = "e"
     )
     public void wrapIncorrectResultSizeDataAccessException(IncorrectResultSizeDataAccessException e) {
@@ -120,9 +118,9 @@ public class RequestExceptionWrapperAOP {
      */
 
     @AfterThrowing(
-        pointcut = "execution(* com.example.ch4_1_newsfeed.controller.*(..))"
-            + "execution(* com.example.ch4_1_newsfeed.service.*(..))"
-            + "execution(* com.example.ch4_1_newsfeed.repository.*(..))",
+        pointcut = "execution(* com.example.ch4_1_newsfeed.controller.*.*(..))"
+            + "execution(* com.example.ch4_1_newsfeed.service.*.*(..))"
+            + "execution(* com.example.ch4_1_newsfeed.repository.*.*(..))",
         throwing = "e"
     )
     public void wrapRuntimeException(RuntimeException e) {
