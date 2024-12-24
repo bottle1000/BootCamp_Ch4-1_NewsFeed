@@ -26,20 +26,6 @@ import java.util.stream.Collectors;
 @Component
 @Slf4j
 public class RequestExceptionWrapperAOP {
-
-
-    /*
-    @AfterThrowing(
-        pointcut = "execution(* com.example.ch4_1_newsfeed.controller.*.*(..))",
-        throwing = "e"
-    )
-    public void wrapHandlerMethodValidationException(HandlerMethodValidationException e) {
-
-        throw new ResponseException();
-    }
-
-     */
-
     /**
      * RequestBody 등으로 변환할 입력 값의 타입이 맞지 않는 경우에 대한 예외 래핑
      *
