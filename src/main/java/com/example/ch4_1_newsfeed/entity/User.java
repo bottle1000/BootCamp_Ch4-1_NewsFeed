@@ -32,12 +32,12 @@ public class User extends BaseEntity {
     @Column(name = "profile_picture")
     private String profilePicture;
 
-    public static User createUser(SignUpUserRequestDto request) {
+    public static User createUser(SignUpUserRequestDto request, String encodedPassword) {
         return new User(
                 null,
                 request.getName(),
                 request.getEmail(),
-                request.getPassword(),
+                encodedPassword,
                 request.getPhoneNumber(),
                 request.getPictureUrl()
         );
