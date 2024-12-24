@@ -1,9 +1,10 @@
 package com.example.ch4_1_newsfeed.controller;
 
-import com.example.ch4_1_newsfeed.entity.Relationship;
+import com.example.ch4_1_newsfeed.dto.user.response.RelationshipResponseDto;
 import com.example.ch4_1_newsfeed.service.UserServiceD;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,10 +18,12 @@ public class UserControllerD {
 
     private final UserServiceD userService;
 
-    @PostMapping("/usersD/{id}")
-    public ResponseEntity<Void> follow (@PathVariable Long id, HttpSession session) {
+    @PostMapping("/{id}")
+    public ResponseEntity<RelationshipResponseDto> follow(
+            @PathVariable Long id, HttpSession session) {
 
+        RelationshipResponseDto following = userService.follow(id, session);
 
-
+        return new ResponseEntity<>(following, HttpStatus.OK);
     }
 }
