@@ -34,12 +34,12 @@ public class User extends BaseEntity {
 
     }
 
-    public static User createUser(SignUpUserRequestDto request) {
+    public static User createUser(SignUpUserRequestDto request, String encodedPassword) {
         return new User(
                 null,
                 request.getName(),
                 request.getEmail(),
-                request.getPassword(),
+                encodedPassword,
                 request.getPhoneNumber(),
                 request.getPictureUrl()
         );
