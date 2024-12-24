@@ -9,6 +9,8 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +32,7 @@ public class UserController {
      * @return
      */
     @PostMapping("/login")
-    public ResponseEntity<UserResponseDto> login(@RequestBody LoginUserRequestDto loginRequest,
+    public ResponseEntity<UserResponseDto> login(@Valid @RequestBody LoginUserRequestDto loginRequest,
                                                  HttpServletRequest servletRequest,
                                                  HttpServletResponse servletResponse) {
 
@@ -41,7 +43,7 @@ public class UserController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<SignUpUserResponseDto> createUser(@RequestBody SignUpUserRequestDto signUpRequest) {
+    public ResponseEntity<SignUpUserResponseDto> createUser(@Valid @RequestBody SignUpUserRequestDto signUpRequest) {
         SignUpUserResponseDto userSignUpDto = userService.createUser(signUpRequest);
 
         return new ResponseEntity<>(userSignUpDto, HttpStatus.OK);
@@ -62,7 +64,7 @@ public class UserController {
      * 내 프로필 수정
      */
     @PutMapping("/me")
-    public ResponseEntity<UpdateUserResponseDto> updateMyProfile(HttpSession session, UpdateUserRequestDto request) {
+    public ResponseEntity<UpdateUserResponseDto> updateMyProfile(HttpSession session, @Valid UpdateUserRequestDto request) {
         Long userId = (Long) session.getAttribute("userId");
         UpdateUserResponseDto userUpdateDto = userService.updateMyProfile(userId, request);
 
@@ -73,7 +75,7 @@ public class UserController {
      * 비밀번호 수정
      */
     @PutMapping("/me/password")
-    public ResponseEntity<Void> updateMyPassword(HttpSession session, UpdatePasswordUserRequestDto request) {
+    public ResponseEntity<Void> updateMyPassword(HttpSession session, @Valid UpdatePasswordUserRequestDto request) {
         Long userId = (Long) session.getAttribute("userId");
         userService.updateMyPassword(userId, request);
 
@@ -85,7 +87,9 @@ public class UserController {
      */
 
     @GetMapping("/{id}")
-    public ResponseEntity<ProfileUserResponseDto> getUserProfile(@PathVariable Long id) {
+    public ResponseEntity<ProfileUserResponseDto> getUserProfile(
+        @Valid @Positive(message = "id는 양의 정수여야 합니다.") @PathVariable Long id
+    ) {
         ProfileUserResponseDto userProfile = userService.getUserProfile(id);
 
         return new ResponseEntity<>(userProfile, HttpStatus.OK);
@@ -95,7 +99,7 @@ public class UserController {
      * 회원 탈퇴
      */
     @DeleteMapping("/me")
-    public ResponseEntity<String> deleteUser(DeleteUserRequestDto request, HttpSession session) {
+    public ResponseEntity<String> deleteUser(@Valid DeleteUserRequestDto request, HttpSession session) {
         Long userId = (Long) session.getAttribute("userId");
         userService.deleteUser(userId, request);
 
