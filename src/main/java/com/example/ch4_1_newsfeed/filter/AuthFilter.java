@@ -1,5 +1,6 @@
 package com.example.ch4_1_newsfeed.filter;
 
+import com.example.ch4_1_newsfeed.SessionConst;
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -30,7 +31,7 @@ public class AuthFilter implements Filter {
 
             HttpSession session = httpRequest.getSession(false);
 
-            if (session != null || session.getAttribute("username") == null) {
+            if (session != null || session.getAttribute(SessionConst.LOGIN_USER) == null) {
                 httpResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, "unauthorized");
             }
         }
