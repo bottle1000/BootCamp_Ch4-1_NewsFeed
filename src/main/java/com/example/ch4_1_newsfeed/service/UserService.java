@@ -2,6 +2,7 @@ package com.example.ch4_1_newsfeed.service;
 
 import com.example.ch4_1_newsfeed.dto.user.response.*;
 import com.example.ch4_1_newsfeed.dto.user.request.*;
+import com.example.ch4_1_newsfeed.encode.PasswordEncoder;
 import com.example.ch4_1_newsfeed.entity.Feed;
 import com.example.ch4_1_newsfeed.entity.User;
 import com.example.ch4_1_newsfeed.repository.FeedRepository;
@@ -18,18 +19,40 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final FeedRepository feedRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserResponseDto getUserId(LoginUserRequestDto request) {
+    /**
+     * 유저의 이메일로 유저 아이디를 찾음.
+     * @param
+     * @return
+     */
+    public UserResponseDto getUserId(String email) {
+        User user = userRepository.findByEmail(email);
+        return UserResponseDto.from(user);
+    }
+
+    /**
+     * 로그인 기능 추가
+     * @param : 이메일, encode 된 비밀번호 포함
+     */
+    public UserResponseDto loginUser(LoginUserRequestDto request) {
         User user = userRepository.findByEmail(request.getEmail());
-        // 비밀번호 암호화 된걸로 매치 예정
+
+        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+            throw new IllegalStateException("비밀번호가 일치하지 않습니다.");
+        }
 
         return UserResponseDto.from(user);
     }
 
     public SignUpUserResponseDto createUser(SignUpUserRequestDto request) {
-        User user = User.createUser(request);
-        userRepository.save(user);
+        String encodedPassword = passwordEncoder.encode(request.getPassword());
+        User user = User.createUser(request,encodedPassword);
+        /**
+         * 비밀번호 암호화 기능 추가
+         */
 
+        userRepository.save(user);
         return SignUpUserResponseDto.from(user);
     }
 
