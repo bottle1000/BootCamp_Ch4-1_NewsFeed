@@ -19,21 +19,18 @@ public class FeedControllerT {
     private final FeedServiceT feedServiceT;
 
     /**
-     * 모든 피드조회
-     * 페이지네이션 구현 필요함
+     * 모든 피드조회 <br>
+     * 페이지네이션 구현 필요함 <br>
+     * - todo : page랑 size값 받아오기만 했고 구현은 추후에 할 예정
      */
     @GetMapping
     public ResponseEntity<List<FindAllFeedResponseDto>> findAllFeeds(@RequestParam int page, @RequestParam int size) {
-        /**
-         * todo : page랑 size값 받아오기만 했고 구현은 추후에 할 예정
-         */
 
         return new ResponseEntity<>(feedServiceT.findAllFeeds(page, size), HttpStatus.OK);
     }
 
     /**
      * 특정 id로 뉴스피드 조회
-     *
      */
     @GetMapping("/{user_id}")
     public ResponseEntity<List> findByUserId(@PathVariable Long user_id) {
@@ -45,7 +42,6 @@ public class FeedControllerT {
 
     /**
      * 특정 뉴스피드 조회
-     *
      */
     @GetMapping("/{user_id}/{feed_id}")
     public ResponseEntity findByUserAndFeedId(@PathVariable Long user_id, Long feed_id) {
