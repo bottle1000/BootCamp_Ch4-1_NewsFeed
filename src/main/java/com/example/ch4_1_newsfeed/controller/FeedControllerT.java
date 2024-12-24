@@ -24,7 +24,10 @@ public class FeedControllerT {
      * - todo : page랑 size값 받아오기만 했고 구현은 추후에 할 예정
      */
     @GetMapping
-    public ResponseEntity<List<FindAllFeedResponseDto>> findAllFeeds(@RequestParam int page, @RequestParam int size) {
+    public ResponseEntity<List<FindAllFeedResponseDto>> findAllFeeds(
+        @Valid @NotNull(message = "page가 포함되어야 합니다.") @Positive(message = "page는 양의 정수여야 합니다.") @RequestParam int page,
+        @Valid @Positive(message = "size는 양의 정수여야 합니다.") @RequestParam int size
+    ) {
 
         return new ResponseEntity<>(feedServiceT.findAllFeeds(page, size), HttpStatus.OK);
     }
@@ -33,7 +36,9 @@ public class FeedControllerT {
      * 특정 id로 뉴스피드 조회
      */
     @GetMapping("/{user_id}")
-    public ResponseEntity<List> findByUserId(@PathVariable Long user_id) {
+    public ResponseEntity<List> findByUserId(
+        @Valid @NotNull @Positive(message = "user_id는 양의 정수여야 합니다.") @PathVariable Long user_id
+    ) {
 
         List<FindByUserIdResponseDto> responseDtos = feedServiceT.findByUserId(user_id);
 
