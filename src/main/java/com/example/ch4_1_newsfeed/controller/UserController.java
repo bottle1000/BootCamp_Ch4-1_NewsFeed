@@ -3,7 +3,11 @@ package com.example.ch4_1_newsfeed.controller;
 
 import com.example.ch4_1_newsfeed.dto.user.response.*;
 import com.example.ch4_1_newsfeed.dto.user.request.*;
+import com.example.ch4_1_newsfeed.service.AuthService;
 import com.example.ch4_1_newsfeed.service.UserService;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -17,19 +21,21 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     private final UserService userService;
+    private final AuthService authService;
 
     /**
      * 로그인 기능
      *
      * @param loginRequest : userEmail, userPassword
-     * @param session
      * @return
      */
     @PostMapping("/login")
-    public ResponseEntity<UserResponseDto> login(@RequestBody LoginUserRequestDto loginRequest, HttpSession session) {
+    public ResponseEntity<UserResponseDto> login(@RequestBody LoginUserRequestDto loginRequest,
+                                                 HttpServletRequest servletRequest,
+                                                 HttpServletResponse servletResponse) {
 
         UserResponseDto userDto = userService.loginUser(loginRequest);
-        session.setAttribute("userId", userDto.getId());
+        authService.setSessionAndCookie(userDto, servletRequest, servletResponse);
 
         return new ResponseEntity<>(userDto, HttpStatus.OK);
     }
