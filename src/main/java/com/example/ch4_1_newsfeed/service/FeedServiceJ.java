@@ -28,9 +28,17 @@ public class FeedServiceJ {
         return new FeedResponseDto(
                 feed.getId(),
                 feed.getContents(),
-                feed.getCreatedAt()
-        );
+                feed.getCreatedAt());
+
     }
+    public void delete(Long id) {
+
+        Feed findFeed = feedRepository.findByIdOrElseThrow(id);
+
+        feedRepository.delete(findFeed);
+    }
+
+
 }
 
 
