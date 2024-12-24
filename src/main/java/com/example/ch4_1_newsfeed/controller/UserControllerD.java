@@ -3,6 +3,9 @@ package com.example.ch4_1_newsfeed.controller;
 import com.example.ch4_1_newsfeed.dto.user.response.RelationshipResponseDto;
 import com.example.ch4_1_newsfeed.service.UserServiceD;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +23,9 @@ public class UserControllerD {
 
     @PostMapping("/{id}")
     public ResponseEntity<RelationshipResponseDto> follow(
-            @PathVariable Long id, HttpSession session) {
+        @Valid @NotNull(message = "id가 포함되어야 합니다.") @Positive(message = "id는 양의 정수여야 합니다.") @PathVariable Long id,
+        HttpSession session
+    ) {
 
         RelationshipResponseDto following = userService.follow(id, session);
 
