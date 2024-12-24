@@ -27,7 +27,8 @@ public class UserService {
      * @return
      */
     public UserResponseDto getUserId(String email) {
-        User user = userRepository.findByEmail(email);
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalStateException("이메일이 존재하지 않습니다."));
         return UserResponseDto.from(user);
     }
 
@@ -36,7 +37,9 @@ public class UserService {
      * @param : 이메일, encode 된 비밀번호 포함
      */
     public UserResponseDto loginUser(LoginUserRequestDto request) {
-        User user = userRepository.findByEmail(request.getEmail());
+
+        User user = userRepository.findByEmail(request.getEmail())
+                .orElseThrow(() -> new IllegalStateException("이메일이 존재하지 않습니다."));
 
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
             throw new IllegalStateException("비밀번호가 일치하지 않습니다.");
