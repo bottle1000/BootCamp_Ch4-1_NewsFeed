@@ -20,7 +20,6 @@ public class SignUpUserRequestDto {
     @NotBlank(message = "전화번호가 포함되어야 합니다.")
     @Pattern(regexp = "^(01[0-9])-(\\d{3,4})-(\\d{4})$", message = "올바른 전화번호 형식이어야 합니다.")
     private String phoneNumber;
-    @NotBlank(message = "사진이 포함되어야 합니다.")
     // 요청에서 바로 이미지 경로를 받을 것인지 이미지 파일을 받아 저장경로를 따로 지정할 것인지 논의 필요
     private String pictureUrl;
 }

@@ -11,6 +11,6 @@ public class LoginUserRequestDto {
     @Email(message = "올바른 이메일 형식이어야 합니다.")
     private String email;
     @NotBlank(message = "비밀번호가 포함되어야 합니다.")
-    @Size(max = 255, message = "비밀번호는 255자 내로 작성해주세요.")
+    @Size(max = 255, message = "비밀번호는 255 이하여야 합니다.")
     private String password;
 }

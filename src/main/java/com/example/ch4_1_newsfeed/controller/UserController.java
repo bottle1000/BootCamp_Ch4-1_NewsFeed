@@ -10,11 +10,13 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
@@ -64,7 +66,9 @@ public class UserController {
      * 내 프로필 수정
      */
     @PutMapping("/me")
-    public ResponseEntity<UpdateUserResponseDto> updateMyProfile(HttpSession session, @Valid UpdateUserRequestDto request) {
+    public ResponseEntity<UpdateUserResponseDto> updateMyProfile(
+        HttpSession session, @Valid @RequestBody UpdateUserRequestDto request
+    ) {
         Long userId = (Long) session.getAttribute("userId");
         UpdateUserResponseDto userUpdateDto = userService.updateMyProfile(userId, request);
 
@@ -75,7 +79,9 @@ public class UserController {
      * 비밀번호 수정
      */
     @PutMapping("/me/password")
-    public ResponseEntity<Void> updateMyPassword(HttpSession session, @Valid UpdatePasswordUserRequestDto request) {
+    public ResponseEntity<Void> updateMyPassword(
+        HttpSession session, @Valid @ModelAttribute UpdatePasswordUserRequestDto request
+    ) {
         Long userId = (Long) session.getAttribute("userId");
         userService.updateMyPassword(userId, request);
 
@@ -87,8 +93,9 @@ public class UserController {
      */
 
     @GetMapping("/{id}")
+    @Validated
     public ResponseEntity<ProfileUserResponseDto> getUserProfile(
-        @Valid @Positive(message = "id는 양의 정수여야 합니다.") @PathVariable Long id
+        @PathVariable @NotNull(message = "id가 포함되어야 합니다.") @Positive(message = "id는 양의 정수여야 합니다.") Long id
     ) {
         ProfileUserResponseDto userProfile = userService.getUserProfile(id);
 
@@ -99,7 +106,7 @@ public class UserController {
      * 회원 탈퇴
      */
     @DeleteMapping("/me")
-    public ResponseEntity<String> deleteUser(@Valid DeleteUserRequestDto request, HttpSession session) {
+    public ResponseEntity<String> deleteUser(@Valid @ModelAttribute DeleteUserRequestDto request, HttpSession session) {
         Long userId = (Long) session.getAttribute("userId");
         userService.deleteUser(userId, request);
 

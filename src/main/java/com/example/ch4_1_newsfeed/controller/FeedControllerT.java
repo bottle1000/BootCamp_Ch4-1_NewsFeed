@@ -4,6 +4,7 @@ import com.example.ch4_1_newsfeed.dto.user.response.FindAllFeedResponseDto;
 import com.example.ch4_1_newsfeed.dto.user.response.FindByUserIdResponseDto;
 import com.example.ch4_1_newsfeed.service.FeedServiceT;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -21,7 +22,7 @@ public class FeedControllerT {
 
     @GetMapping
     public ResponseEntity<List<FindAllFeedResponseDto>> findAllFeeds(
-        @Valid @Positive(message = "page는 양의 정수여야 합니다.") @RequestParam int page,
+        @Valid @NotNull(message = "page가 포함되어야 합니다.") @Positive(message = "page는 양의 정수여야 합니다.") @RequestParam int page,
         @Valid @Positive(message = "size는 양의 정수여야 합니다.") @RequestParam int size
     ) {
         /**
@@ -33,7 +34,7 @@ public class FeedControllerT {
 
     @GetMapping("/{user_id}")
     public ResponseEntity<List> findByUserId(
-        @Valid @Positive(message = "user_id는 양의 정수여야 합니다.") @PathVariable Long user_id
+        @Valid @NotNull @Positive(message = "user_id는 양의 정수여야 합니다.") @PathVariable Long user_id
     ) {
 
         List<FindByUserIdResponseDto> responseDtos = feedServiceT.findByUserId(user_id);
