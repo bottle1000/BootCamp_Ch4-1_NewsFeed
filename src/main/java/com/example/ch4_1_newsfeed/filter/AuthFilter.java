@@ -50,3 +50,4 @@ public class AuthFilter implements Filter {
         return PatternMatchUtils.simpleMatch(WHITE_LIST, requestURI);
     }
 }
+
