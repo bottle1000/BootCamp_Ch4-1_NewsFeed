@@ -2,7 +2,7 @@ package com.example.ch4_1_newsfeed.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
-
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,4 +27,9 @@ public class Feed extends BaseEntity {
 
     public Feed() {
     }
+
+    public LocalDateTime getCreatedAt() {
+        return null;
+    }
+
 }
