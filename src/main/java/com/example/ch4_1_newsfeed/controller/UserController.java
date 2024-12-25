@@ -112,4 +112,19 @@ public class UserController {
 
         return ResponseEntity.ok("성공적으로 탈퇴 되었습니다.");
     }
+
+
+    /**
+     * 팔로우/언팔로우
+     */
+    @PostMapping("/{id}")
+    public ResponseEntity<RelationshipResponseDto> follow(
+            @Valid @NotNull(message = "id가 포함되어야 합니다.") @Positive(message = "id는 양의 정수여야 합니다.") @PathVariable Long id,
+            HttpSession session
+    ) {
+
+        RelationshipResponseDto following = userService.follow(id, session);
+
+        return new ResponseEntity<>(following, HttpStatus.OK);
+    }
 }
