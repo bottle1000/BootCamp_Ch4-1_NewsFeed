@@ -15,6 +15,7 @@ public interface FeedRepository extends JpaRepository<Feed, Long> {
     /**
      * user_id와 feed_id 조건을 만족하는 데이터를 가져옴
      */
-    Feed findByIdAndId(Long user_id, Long feed_id);
+    Feed findByIdAndId(Long userId, Long feedId);
+
 }
 

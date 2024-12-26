@@ -32,9 +32,8 @@ public class Feed extends BaseEntity {
         return null;
     }
 
-    public void updateFeed(String description, List<Photo> photo) {
+    public void updateFeed(String description) {
         this.description = description;
-        this.photo = photo;
 
     }
 }

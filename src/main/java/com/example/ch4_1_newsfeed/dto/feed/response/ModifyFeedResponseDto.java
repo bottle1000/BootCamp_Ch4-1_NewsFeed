@@ -1,4 +1,4 @@
-package com.example.ch4_1_newsfeed.dto.user.response;
+package com.example.ch4_1_newsfeed.dto.feed.response;
 
 import com.example.ch4_1_newsfeed.entity.Photo;
 import lombok.Getter;
@@ -10,13 +10,13 @@ import java.util.List;
 public class ModifyFeedResponseDto {
 
     private final Long id;
-    private final String contents;
+    private final String description;
     private final List<Photo> photos;
     private final LocalDateTime createdAt;
 
-    public ModifyFeedResponseDto(Long id, String contents, List<Photo> photos, LocalDateTime createdAt) {
+    public ModifyFeedResponseDto(Long id, String description, List<Photo> photos, LocalDateTime createdAt) {
         this.id = id;
-        this.contents = contents;
+        this.description = description;
         this.photos = photos;
         this.createdAt = createdAt;
     }

@@ -1,4 +1,4 @@
-package com.example.ch4_1_newsfeed.dto.user.response;
+package com.example.ch4_1_newsfeed.dto.feed.response;
 
 import com.example.ch4_1_newsfeed.entity.Photo;
 import lombok.Getter;

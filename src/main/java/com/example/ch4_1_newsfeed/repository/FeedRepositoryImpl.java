@@ -4,14 +4,16 @@ import com.example.ch4_1_newsfeed.entity.Feed;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @RequiredArgsConstructor
 @Repository
 public class FeedRepositoryImpl {
 
     private final FeedRepository feedRepository;
 
-    public Feed modifyFeed(Long userId, Long feedId) {
-        return feedRepository.findByIdAndId(userId, feedId);
+    public Optional<Feed> findByFeedId(Long feedId) {
+        return feedRepository.findById(feedId);
     }
 
 
