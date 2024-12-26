@@ -57,10 +57,10 @@ public class FeedService {
 
     /**
      * 모든 피드 조회<br>
-     * 세션에서 로그인한 사용자의 ID 반환
-     * Relationship 에서 사용자가 팔로우한 User 리스트 반환
-     * 리스트에 포함된 유저들의 모든 게시글 반환
-     * 게시글마다 사진 리스트 생성자에 주입
+     * 세션에서 로그인한 사용자의 ID 반환<br>
+     * Relationship 에서 사용자가 팔로우한 User 리스트 반환<br>
+     * 리스트에 포함된 유저들의 모든 게시글 반환<br>
+     * 게시글마다 사진 리스트 생성자에 주입<br>
      * 페이지네이션 적용 필요함
      */
     public Page<FindAllFeedResponseDto> findAllFeeds(int page, int size) {

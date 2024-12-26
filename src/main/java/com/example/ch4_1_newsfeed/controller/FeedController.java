@@ -60,7 +60,12 @@ public class FeedController {
     }
 
     /**
-     * 특정 id로 뉴스피드 조회
+     * 특정 userId로 사용자의 피드를 조회<br>
+     * 1페이지 10개 피드 출력
+     * @param user_id
+     * @param page
+     * @param size
+     * @return
      */
     @GetMapping("/{user_id}")
     public ResponseEntity<List> findByUserId(
@@ -75,7 +80,12 @@ public class FeedController {
     }
 
     /**
-     * 내 id 뉴스피드 조회
+     * 본인 뉴스피드 조회 <br>
+     * 1페이지 10개 피드 출력
+     * @param session
+     * @param page
+     * @param size
+     * @return
      */
     @GetMapping("/me")
     public ResponseEntity<ProfileUserResponseDto> getMyProfile(
@@ -89,7 +99,10 @@ public class FeedController {
     }
 
     /**
-     * 특정 뉴스피드 조회
+     * 특정 user의 하나의 피드 조회 <br>
+     * @param user_id
+     * @param feed_id
+     * @return
      */
     @GetMapping("/{user_id}/{feed_id}")
     public ResponseEntity findByUserAndFeedId(@PathVariable Long user_id, Long feed_id) {
@@ -100,7 +113,10 @@ public class FeedController {
     }
 
     /**
-     * 피드 수정
+     * 본인 피드 수정
+     * @param feed_id
+     * @param dto
+     * @return
      */
     @PutMapping("/{feed_id}")
     public ResponseEntity<FeedResponseDto> modifyFeed(@PathVariable("feed_id") Long feed_id, @RequestBody ModifyFeedRequestDto dto) {
@@ -110,6 +126,8 @@ public class FeedController {
 
     /**
      * 피드 삭제
+     * @param id
+     * @return
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {

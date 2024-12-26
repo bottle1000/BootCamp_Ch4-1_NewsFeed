@@ -44,6 +44,11 @@ public class UserController {
         return new ResponseEntity<>(userDto, HttpStatus.OK);
     }
 
+    /**
+     * 회원가입 기능
+     * @param signUpRequest
+     * @return
+     */
     @PostMapping("/signup")
     public ResponseEntity<SignUpUserResponseDto> createUser(@Valid @RequestBody SignUpUserRequestDto signUpRequest) {
         SignUpUserResponseDto userSignUpDto = userService.createUser(signUpRequest);
