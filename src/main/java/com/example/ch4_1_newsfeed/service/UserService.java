@@ -1,8 +1,10 @@
 package com.example.ch4_1_newsfeed.service;
 
+import com.example.ch4_1_newsfeed.SessionConst;
 import com.example.ch4_1_newsfeed.dto.user.response.*;
 import com.example.ch4_1_newsfeed.dto.user.request.*;
 import com.example.ch4_1_newsfeed.encode.PasswordEncoder;
+import com.example.ch4_1_newsfeed.entity.Feed;
 import com.example.ch4_1_newsfeed.entity.Relationship;
 import com.example.ch4_1_newsfeed.entity.User;
 import com.example.ch4_1_newsfeed.repository.FeedRepository;
@@ -10,9 +12,11 @@ import com.example.ch4_1_newsfeed.repository.RelationshipRepository;
 import com.example.ch4_1_newsfeed.repository.UserRepository;
 import jakarta.servlet.http.HttpSession;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -27,7 +31,6 @@ public class UserService {
 
     /**
      * 유저의 이메일로 유저 아이디를 찾음.
-     *
      * @param
      * @return
      */
@@ -39,7 +42,6 @@ public class UserService {
 
     /**
      * 로그인 기능 추가
-     *
      * @param : 이메일, encode 된 비밀번호 포함
      */
     public UserResponseDto loginUser(LoginUserRequestDto request) {
@@ -56,7 +58,7 @@ public class UserService {
 
     public SignUpUserResponseDto createUser(SignUpUserRequestDto request) {
         String encodedPassword = passwordEncoder.encode(request.getPassword());
-        User user = User.createUser(request, encodedPassword);
+        User user = User.createUser(request,encodedPassword);
         /**
          * 비밀번호 암호화 기능 추가
          */
@@ -109,11 +111,11 @@ public class UserService {
 
             Relationship relationship = new Relationship(following, followed);
             relationshipRepository.save(relationship);
-            return new RelationshipResponseDto(following, followed, "you followed " + followed.getName());
+            return RelationshipResponseDto.of(following,followed);
 
         }
 
         relationshipRepository.delete(foundRelationship.get());
-        return new RelationshipResponseDto(following, followed, "you unfollowed " + followed.getName());
+        return RelationshipResponseDto.of(following, followed);
     }
 }

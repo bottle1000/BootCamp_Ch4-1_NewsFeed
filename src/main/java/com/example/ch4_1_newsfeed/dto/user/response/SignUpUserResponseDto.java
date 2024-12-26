@@ -15,6 +15,9 @@ public class SignUpUserResponseDto {
     private String name;
     private LocalDateTime createdAt;
 
+    /**
+     * 정적 팩토리 메서드
+     */
     public static SignUpUserResponseDto from (User user) {
         return new SignUpUserResponseDto(
                 user.getId(),
