@@ -31,8 +31,8 @@ public class Feed extends BaseEntity {
         this.contents = contents;
         this.user = user;
     }
+
+    public void updateFeed(String contents) {
+        this.contents = this.contents;
+    }
 }
-
-
-
-

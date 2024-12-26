@@ -1,11 +1,14 @@
 package com.example.ch4_1_newsfeed.service;
 
-import com.example.ch4_1_newsfeed.dto.user.response.FindAllFeedResponseDto;
-import com.example.ch4_1_newsfeed.dto.user.response.FindByUserAndFeedIdResponseDto;
-import com.example.ch4_1_newsfeed.dto.user.response.FindByUserIdResponseDto;
+import com.example.ch4_1_newsfeed.dto.feed.FeedResponseDto;
+import com.example.ch4_1_newsfeed.dto.feed.request.ModifyFeedRequestDto;
+import com.example.ch4_1_newsfeed.dto.feed.response.FindAllFeedResponseDto;
+import com.example.ch4_1_newsfeed.dto.feed.response.FindByUserAndFeedIdResponseDto;
+import com.example.ch4_1_newsfeed.dto.feed.response.FindByUserIdResponseDto;
 import com.example.ch4_1_newsfeed.entity.Feed;
 import com.example.ch4_1_newsfeed.entity.Photo;
 import com.example.ch4_1_newsfeed.repository.FeedRepository;
+import com.example.ch4_1_newsfeed.repository.FeedRepositoryImpl;
 import com.example.ch4_1_newsfeed.repository.PhotoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,6 +19,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class FeedServiceT {
 
+    private final FeedRepositoryImpl feedRepositoryImpl;
     private final FeedRepository feedRepository;
     private final PhotoRepository photoRepository;
 
@@ -65,6 +69,23 @@ public class FeedServiceT {
                 byIdAndId.getUser(),
                 photos,
                 byIdAndId.getCreatedAt()
+        );
+    }
+
+    /**
+     * 피드 수정
+     */
+    public FeedResponseDto updateFeed(Long feed_id, ModifyFeedRequestDto dto) {
+        Feed feed = feedRepositoryImpl.findByFeedId(feed_id)
+                .orElseThrow(() -> new IllegalArgumentException("NOT FOUND"));
+
+        feed.updateFeed(dto.getContents());
+
+        return new FeedResponseDto(
+                feed.getId(),
+                feed.getUser().getName(),
+                feed.getContents(),
+                feed.getCreatedAt()
         );
     }
 }

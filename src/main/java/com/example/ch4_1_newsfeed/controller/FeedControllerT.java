@@ -1,8 +1,10 @@
 package com.example.ch4_1_newsfeed.controller;
 
-import com.example.ch4_1_newsfeed.dto.user.response.FindAllFeedResponseDto;
-import com.example.ch4_1_newsfeed.dto.user.response.FindByUserAndFeedIdResponseDto;
-import com.example.ch4_1_newsfeed.dto.user.response.FindByUserIdResponseDto;
+import com.example.ch4_1_newsfeed.dto.feed.FeedResponseDto;
+import com.example.ch4_1_newsfeed.dto.feed.request.ModifyFeedRequestDto;
+import com.example.ch4_1_newsfeed.dto.feed.response.FindAllFeedResponseDto;
+import com.example.ch4_1_newsfeed.dto.feed.response.FindByUserAndFeedIdResponseDto;
+import com.example.ch4_1_newsfeed.dto.feed.response.FindByUserIdResponseDto;
 import com.example.ch4_1_newsfeed.service.FeedServiceT;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -57,6 +59,14 @@ public class FeedControllerT {
         FindByUserAndFeedIdResponseDto responseDtos = feedServiceT.findByUserAndFeed(user_id, feed_id);
 
         return new ResponseEntity(responseDtos, HttpStatus.OK);
+    }
 
+    /**
+     * 피드 수정
+     */
+    @PutMapping("/{feed_id}")
+    public ResponseEntity<FeedResponseDto> modifyFeed(@PathVariable("feed_id") Long feed_id, @RequestBody ModifyFeedRequestDto dto) {
+        FeedResponseDto feedResponseDto = feedServiceT.updateFeed(feed_id, dto);
+        return ResponseEntity.ok(feedResponseDto);
     }
 }

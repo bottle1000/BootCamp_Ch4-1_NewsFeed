@@ -12,7 +12,6 @@ public class FeedRequestDto {
         this.contents = contents;
         this.name = name;
     }
-
 }
 
 
