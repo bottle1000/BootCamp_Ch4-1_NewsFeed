@@ -1,8 +1,12 @@
 package com.example.ch4_1_newsfeed.controller;
 
 
-import com.example.ch4_1_newsfeed.dto.user.response.*;
-import com.example.ch4_1_newsfeed.dto.user.request.*;
+import com.example.ch4_1_newsfeed.common.SessionConst;
+import com.example.ch4_1_newsfeed.model.dto.user.request.*;
+import com.example.ch4_1_newsfeed.model.dto.user.response.RelationshipResponseDto;
+import com.example.ch4_1_newsfeed.model.dto.user.response.SignUpUserResponseDto;
+import com.example.ch4_1_newsfeed.model.dto.user.response.UpdateUserResponseDto;
+import com.example.ch4_1_newsfeed.model.dto.user.response.UserResponseDto;
 import com.example.ch4_1_newsfeed.service.AuthService;
 import com.example.ch4_1_newsfeed.service.UserService;
 import jakarta.servlet.http.Cookie;
@@ -16,7 +20,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
@@ -44,6 +47,26 @@ public class UserController {
         return new ResponseEntity<>(userDto, HttpStatus.OK);
     }
 
+    /**
+     * 로그아웃 기능
+     * @param session
+     * @param servletResponse
+     * @return
+     */
+    @PostMapping("/logout")
+    public ResponseEntity<String> logout(HttpSession session, HttpServletResponse servletResponse) {
+        session.invalidate();
+        Cookie cookie = new Cookie(SessionConst.LOGIN_USER, null);
+        servletResponse.addCookie(cookie);
+
+        return new ResponseEntity<>("Logout Done", HttpStatus.OK);
+    }
+
+    /**
+     * 회원가입 기능
+     * @param signUpRequest
+     * @return
+     */
     @PostMapping("/signup")
     public ResponseEntity<SignUpUserResponseDto> createUser(@Valid @RequestBody SignUpUserRequestDto signUpRequest) {
         SignUpUserResponseDto userSignUpDto = userService.createUser(signUpRequest);
@@ -56,9 +79,9 @@ public class UserController {
      */
     @PutMapping("/me")
     public ResponseEntity<UpdateUserResponseDto> updateMyProfile(
-        HttpSession session, @Valid @RequestBody UpdateUserRequestDto request
+            HttpSession session, @Valid @RequestBody UpdateUserRequestDto request
     ) {
-        Long userId = (Long) session.getAttribute("userId");
+        Long userId = (Long) session.getAttribute(SessionConst.LOGIN_USER);
         UpdateUserResponseDto userUpdateDto = userService.updateMyProfile(userId, request);
 
         return new ResponseEntity<>(userUpdateDto, HttpStatus.OK);
@@ -69,9 +92,9 @@ public class UserController {
      */
     @PutMapping("/me/password")
     public ResponseEntity<Void> updateMyPassword(
-        HttpSession session, @Valid @ModelAttribute UpdatePasswordUserRequestDto request
+            HttpSession session, @Valid @RequestBody UpdatePasswordUserRequestDto request
     ) {
-        Long userId = (Long) session.getAttribute("userId");
+        Long userId = (Long) session.getAttribute(SessionConst.LOGIN_USER);
         userService.updateMyPassword(userId, request);
 
         return new ResponseEntity<>(HttpStatus.OK);
@@ -82,7 +105,7 @@ public class UserController {
      */
     @DeleteMapping("/me")
     public ResponseEntity<String> deleteUser(@Valid @ModelAttribute DeleteUserRequestDto request, HttpSession session) {
-        Long userId = (Long) session.getAttribute("userId");
+        Long userId = (Long) session.getAttribute(SessionConst.LOGIN_USER);
         userService.deleteUser(userId, request);
 
         return ResponseEntity.ok("성공적으로 탈퇴 되었습니다.");

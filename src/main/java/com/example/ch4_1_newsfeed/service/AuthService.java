@@ -1,7 +1,7 @@
 package com.example.ch4_1_newsfeed.service;
 
-import com.example.ch4_1_newsfeed.SessionConst;
-import com.example.ch4_1_newsfeed.dto.user.response.UserResponseDto;
+import com.example.ch4_1_newsfeed.common.SessionConst;
+import com.example.ch4_1_newsfeed.model.dto.user.response.UserResponseDto;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
