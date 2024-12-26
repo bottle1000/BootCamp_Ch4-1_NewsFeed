@@ -12,17 +12,13 @@ import com.example.ch4_1_newsfeed.entity.Photo;
 import com.example.ch4_1_newsfeed.entity.User;
 import com.example.ch4_1_newsfeed.repository.FeedRepository;
 import com.example.ch4_1_newsfeed.repository.PhotoRepository;
-import com.example.ch4_1_newsfeed.repository.RelationshipRepository;
 import com.example.ch4_1_newsfeed.repository.UserRepository;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.List;
 
@@ -34,7 +30,6 @@ public class FeedService {
     private final UserRepository userRepository;
     private final FeedRepository feedRepository;
     private final PhotoRepository photoRepository;
-    private final RelationshipRepository relationshipRepository;
     private final HttpSession session;
 
     /**
@@ -49,12 +44,7 @@ public class FeedService {
         feedRepository.save(feed);
 
 
-        return new FeedResponseDto(
-                feed.getId(),
-                findUser.getName(),
-                feed.getContents(),
-                feed.getCreatedAt());
-
+        return FeedResponseDto.from(feed);
     }
 
     /**
@@ -84,12 +74,7 @@ public class FeedService {
         PageRequest pageRequest = PageRequest.of(page, size);
 
         return feedRepository.findAllByUserId(user_id,pageRequest).stream()
-                .map(feed -> new FindByUserIdResponseDto(
-                        feed.getId(),
-                        feed.getUser().getName(),
-                        feed.getContents(),
-                        feed.getCreatedAt(),
-                        photoRepository.findPhotoByFeed_id(feed.getId())
+                .map(feed -> FindByUserIdResponseDto.from(feed, photoRepository.findPhotoByFeed_id(feed.getId())
                 )).toList();
     }
 
@@ -100,13 +85,7 @@ public class FeedService {
         Feed byIdAndId = feedRepository.findByIdAndId(user_id, feed_id);
         List<Photo> photos = photoRepository.findPhotoByFeed_id(feed_id);
 
-        return new FindByUserAndFeedIdResponseDto(
-                byIdAndId.getId(),
-                byIdAndId.getContents(),
-                byIdAndId.getUser(),
-                photos,
-                byIdAndId.getCreatedAt()
-        );
+        return FindByUserAndFeedIdResponseDto.from(byIdAndId, photos);
     }
 
     /**
@@ -128,15 +107,9 @@ public class FeedService {
     public FeedResponseDto updateFeed(Long feed_id, ModifyFeedRequestDto dto) {
         Feed feed = feedRepository.findById(feed_id)
                 .orElseThrow(() -> new IllegalArgumentException("NOT FOUND"));
-
         feed.updateFeed(dto.getContents());
 
-        return new FeedResponseDto(
-                feed.getId(),
-                feed.getUser().getName(),
-                feed.getContents(),
-                feed.getCreatedAt()
-        );
+        return FeedResponseDto.from(feed);
     }
 
     /**

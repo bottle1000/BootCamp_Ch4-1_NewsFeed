@@ -24,10 +24,8 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository userRepository;
-    private final FeedRepository feedRepository;
     private final PasswordEncoder passwordEncoder;
     private final RelationshipRepository relationshipRepository;
-    private final HttpSession session;
 
     /**
      * 유저의 이메일로 유저 아이디를 찾음.
@@ -111,11 +109,11 @@ public class UserService {
 
             Relationship relationship = new Relationship(following, followed);
             relationshipRepository.save(relationship);
-            return new RelationshipResponseDto(following,followed,"you followed " + followed.getName());
+            return RelationshipResponseDto.of(following,followed);
 
         }
 
         relationshipRepository.delete(foundRelationship.get());
-        return new RelationshipResponseDto(following, followed, "you unfollowed " + followed.getName());
+        return RelationshipResponseDto.of(following, followed);
     }
 }
