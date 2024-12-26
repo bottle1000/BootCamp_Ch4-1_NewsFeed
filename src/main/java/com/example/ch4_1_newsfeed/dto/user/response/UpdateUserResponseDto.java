@@ -13,6 +13,7 @@ public class UpdateUserResponseDto {
     private String name;
     private String pictureUrl;
 
+    // 정적 팩토리 메서드
     public static UpdateUserResponseDto from(User user) {
         return new UpdateUserResponseDto(
                 user.getId(),

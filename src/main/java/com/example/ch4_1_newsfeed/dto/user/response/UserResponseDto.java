@@ -12,6 +12,9 @@ public class UserResponseDto {
     private String email;
     private String name;
 
+    /**
+     * 정적 팩토리 메서드
+     */
     public static UserResponseDto from(User user) {
         return new UserResponseDto(
                 user.getId(),
