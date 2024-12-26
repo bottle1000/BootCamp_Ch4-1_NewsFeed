@@ -1,4 +1,4 @@
-package com.example.ch4_1_newsfeed.dto.user.response;
+package com.example.ch4_1_newsfeed.dto.feed.response;
 
 import com.example.ch4_1_newsfeed.entity.Photo;
 import com.example.ch4_1_newsfeed.entity.User;
@@ -11,9 +11,8 @@ import java.util.List;
 @AllArgsConstructor
 public class FindByUserAndFeedIdResponseDto {
     private Long id;
-    private String description;
+    private String contents;
     private User user;
     private List<Photo> photos;
     private LocalDateTime createdAt;
-
 }
