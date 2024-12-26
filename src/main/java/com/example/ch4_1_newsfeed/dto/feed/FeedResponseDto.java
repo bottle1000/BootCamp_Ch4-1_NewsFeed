@@ -1,5 +1,4 @@
-package com.example.ch4_1_newsfeed.dto.feed.response;
-
+package com.example.ch4_1_newsfeed.dto.feed;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +11,6 @@ public class FeedResponseDto {
 
     private final Long id;
     private final String username;
-    private final String description;
+    private final String contents;
     private final LocalDateTime createdAt;
-
 }

@@ -1,11 +1,14 @@
 package com.example.ch4_1_newsfeed.controller;
 
+import com.example.ch4_1_newsfeed.dto.feed.FeedResponseDto;
 import com.example.ch4_1_newsfeed.dto.feed.request.ModifyFeedRequestDto;
-import com.example.ch4_1_newsfeed.dto.feed.response.FeedResponseDto;
 import com.example.ch4_1_newsfeed.dto.feed.response.FindAllFeedResponseDto;
 import com.example.ch4_1_newsfeed.dto.feed.response.FindByUserAndFeedIdResponseDto;
-import com.example.ch4_1_newsfeed.dto.user.response.FindByUserIdResponseDto;
+import com.example.ch4_1_newsfeed.dto.feed.response.FindByUserIdResponseDto;
 import com.example.ch4_1_newsfeed.service.FeedServiceT;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +29,10 @@ public class FeedControllerT {
      * - todo : page랑 size값 받아오기만 했고 구현은 추후에 할 예정
      */
     @GetMapping
-    public ResponseEntity<List<FindAllFeedResponseDto>> findAllFeeds(@RequestParam int page, @RequestParam int size) {
+    public ResponseEntity<List<FindAllFeedResponseDto>> findAllFeeds(
+        @Valid @NotNull(message = "page가 포함되어야 합니다.") @Positive(message = "page는 양의 정수여야 합니다.") @RequestParam int page,
+        @Valid @Positive(message = "size는 양의 정수여야 합니다.") @RequestParam int size
+    ) {
 
         return new ResponseEntity<>(feedServiceT.findAllFeeds(page, size), HttpStatus.OK);
     }
@@ -34,10 +40,12 @@ public class FeedControllerT {
     /**
      * 특정 id로 뉴스피드 조회
      */
-    @GetMapping("/{userId}")
-    public ResponseEntity<List> findByUserId(@PathVariable Long userId) {
+    @GetMapping("/{user_id}")
+    public ResponseEntity<List> findByUserId(
+        @Valid @NotNull @Positive(message = "user_id는 양의 정수여야 합니다.") @PathVariable Long user_id
+    ) {
 
-        List<FindByUserIdResponseDto> responseDtos = feedServiceT.findByUserId(userId);
+        List<FindByUserIdResponseDto> responseDtos = feedServiceT.findByUserId(user_id);
 
         return new ResponseEntity<>(responseDtos, HttpStatus.OK);
     }
@@ -45,10 +53,10 @@ public class FeedControllerT {
     /**
      * 특정 뉴스피드 조회
      */
-    @GetMapping("/{userId}/{feedId}")
-    public ResponseEntity findByUserAndFeedId(@PathVariable Long userId, Long feedId) {
+    @GetMapping("/{user_id}/{feed_id}")
+    public ResponseEntity findByUserAndFeedId(@PathVariable Long user_id, Long feed_id) {
 
-        FindByUserAndFeedIdResponseDto responseDtos = feedServiceT.findByUserAndFeed(userId, feedId);
+        FindByUserAndFeedIdResponseDto responseDtos = feedServiceT.findByUserAndFeed(user_id, feed_id);
 
         return new ResponseEntity(responseDtos, HttpStatus.OK);
     }
@@ -56,9 +64,9 @@ public class FeedControllerT {
     /**
      * 피드 수정
      */
-    @PutMapping("/{feedId}")
-    public ResponseEntity<FeedResponseDto> modifyFeed(@PathVariable("feedId") Long feedId, @RequestBody ModifyFeedRequestDto dto) {
-        FeedResponseDto feedResponseDto = feedServiceT.updateFeed(feedId, dto);
+    @PutMapping("/{feed_id}")
+    public ResponseEntity<FeedResponseDto> modifyFeed(@PathVariable("feed_id") Long feed_id, @RequestBody ModifyFeedRequestDto dto) {
+        FeedResponseDto feedResponseDto = feedServiceT.updateFeed(feed_id, dto);
         return ResponseEntity.ok(feedResponseDto);
     }
 }

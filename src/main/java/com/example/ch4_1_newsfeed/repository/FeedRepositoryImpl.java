@@ -12,9 +12,7 @@ public class FeedRepositoryImpl {
 
     private final FeedRepository feedRepository;
 
-    public Optional<Feed> findByFeedId(Long feedId) {
-        return feedRepository.findById(feedId);
+    public Optional<Feed> findByFeedId(Long feed_id) {
+        return feedRepository.findById(feed_id);
     }
-
-
 }

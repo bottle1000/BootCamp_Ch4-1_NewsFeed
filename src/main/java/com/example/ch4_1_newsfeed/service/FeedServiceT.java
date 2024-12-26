@@ -1,13 +1,15 @@
 package com.example.ch4_1_newsfeed.service;
 
+import com.example.ch4_1_newsfeed.dto.feed.FeedResponseDto;
 import com.example.ch4_1_newsfeed.dto.feed.request.ModifyFeedRequestDto;
-import com.example.ch4_1_newsfeed.dto.feed.response.FeedResponseDto;
 import com.example.ch4_1_newsfeed.dto.feed.response.FindAllFeedResponseDto;
 import com.example.ch4_1_newsfeed.dto.feed.response.FindByUserAndFeedIdResponseDto;
-import com.example.ch4_1_newsfeed.dto.user.response.FindByUserIdResponseDto;
+import com.example.ch4_1_newsfeed.dto.feed.response.FindByUserIdResponseDto;
 import com.example.ch4_1_newsfeed.entity.Feed;
+import com.example.ch4_1_newsfeed.entity.Photo;
 import com.example.ch4_1_newsfeed.repository.FeedRepository;
 import com.example.ch4_1_newsfeed.repository.FeedRepositoryImpl;
+import com.example.ch4_1_newsfeed.repository.PhotoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +21,7 @@ public class FeedServiceT {
 
     private final FeedRepositoryImpl feedRepositoryImpl;
     private final FeedRepository feedRepository;
+    private final PhotoRepository photoRepository;
 
     /**
      * 모든 피드 조회<br>
@@ -33,37 +36,38 @@ public class FeedServiceT {
                 .map(feed -> new FindAllFeedResponseDto(
                         feed.getId(),
                         feed.getUser().getId(),
-                        feed.getDescription(),
+                        feed.getContents(),
                         feed.getCreatedAt(),
-                        feed.getPhoto() // Feed와 연결된 Photo 리스트
+                        photoRepository.findPhotoByFeed_id(feed.getId())
                 )).toList();
     }
 
     /**
      * 특정 id 뉴스피드 조회
      */
-    public List<FindByUserIdResponseDto> findByUserId(Long userId) {
-        return feedRepository.findById(userId).stream()
+    public List<FindByUserIdResponseDto> findByUserId(Long user_id) {
+        return feedRepository.findAllByUserId(user_id).stream()
                 .map(feed -> new FindByUserIdResponseDto(
                         feed.getId(),
                         feed.getUser().getName(),
-                        feed.getDescription(),
+                        feed.getContents(),
                         feed.getCreatedAt(),
-                        feed.getPhoto()
+                        photoRepository.findPhotoByFeed_id(user_id)
                 )).toList();
     }
 
     /**
      * 특정 뉴스피드 조회
      */
-    public FindByUserAndFeedIdResponseDto findByUserAndFeed(Long userId, Long feedId) {
-        Feed byIdAndId = feedRepository.findByIdAndId(userId, feedId);
+    public FindByUserAndFeedIdResponseDto findByUserAndFeed(Long user_id, Long feed_id) {
+        Feed byIdAndId = feedRepository.findByIdAndId(user_id, feed_id);
+        List<Photo> photos = photoRepository.findPhotoByFeed_id(feed_id);
 
         return new FindByUserAndFeedIdResponseDto(
                 byIdAndId.getId(),
-                byIdAndId.getDescription(),
+                byIdAndId.getContents(),
                 byIdAndId.getUser(),
-                byIdAndId.getPhoto(),
+                photos,
                 byIdAndId.getCreatedAt()
         );
     }
@@ -71,18 +75,17 @@ public class FeedServiceT {
     /**
      * 피드 수정
      */
-    public FeedResponseDto updateFeed(Long feedId, ModifyFeedRequestDto dto) {
-        Feed feed = feedRepositoryImpl.findByFeedId(feedId)
+    public FeedResponseDto updateFeed(Long feed_id, ModifyFeedRequestDto dto) {
+        Feed feed = feedRepositoryImpl.findByFeedId(feed_id)
                 .orElseThrow(() -> new IllegalArgumentException("NOT FOUND"));
 
-        feed.updateFeed(dto.getDescription());
+        feed.updateFeed(dto.getContents());
 
         return new FeedResponseDto(
                 feed.getId(),
                 feed.getUser().getName(),
-                feed.getDescription(),
+                feed.getContents(),
                 feed.getCreatedAt()
         );
-
     }
 }

@@ -6,11 +6,16 @@ import org.aspectj.lang.annotation.Aspect;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.method.annotation.HandlerMethodValidationException;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -21,23 +26,6 @@ import java.util.stream.Collectors;
 @Component
 @Slf4j
 public class RequestExceptionWrapperAOP {
-    /**
-     * Valid 검증 실패한 경우에 대해 예외 래핑
-     * 실패한 모든 Validation에 대한 메시지들을 출력
-     *
-     * @param e
-     */
-    @AfterThrowing(
-        pointcut = "execution(* com.example.ch4_1_newsfeed.controller.*.*(..))",
-        throwing = "e"
-    )
-    public void wrapMethodArgumentNotValidException(MethodArgumentNotValidException e) {
-        String message = e.getBindingResult().getFieldErrors().stream()
-            .map(val -> val.getField() + val.getDefaultMessage())
-            .collect(Collectors.joining("\n"));
-        throw new ResponseException(message, HttpStatus.BAD_REQUEST);
-    }
-
     /**
      * RequestBody 등으로 변환할 입력 값의 타입이 맞지 않는 경우에 대한 예외 래핑
      *
@@ -85,6 +73,19 @@ public class RequestExceptionWrapperAOP {
     }
 
     /**
+     * JPA 쿼리 매개변수로 NULL이 들어갈 경우 발생하는 예외 래핑
+     * 가능하면 사용되지 않도록 구현할 것
+     * @param e
+     */
+    @AfterThrowing(
+        pointcut = "execution(* com.example.ch4_1_newsfeed.repository.*.*(..))",
+        throwing = "e"
+    )
+    public void wrapInvalidDataAccessApiUsageException(InvalidDataAccessApiUsageException e) {
+        throw new ResponseException("필요한 데이터가 존재하지 않습니다.", HttpStatus.BAD_REQUEST);
+    }
+
+    /**
      * 데이터 조회 결과가 존재하지 않는 경우에 대한 예외 래핑
      * 빈 리스트를 반환하는 경우에도
      *
@@ -124,6 +125,7 @@ public class RequestExceptionWrapperAOP {
         throwing = "e"
     )
     public void wrapRuntimeException(RuntimeException e) {
+        log.info("exception: {}, message: {}", e.getClass().getName(), e.getMessage());
         throw new ResponseException("서버 내부 에러", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

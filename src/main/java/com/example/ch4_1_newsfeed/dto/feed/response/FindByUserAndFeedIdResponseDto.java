@@ -11,9 +11,8 @@ import java.util.List;
 @AllArgsConstructor
 public class FindByUserAndFeedIdResponseDto {
     private Long id;
-    private String description;
+    private String contents;
     private User user;
     private List<Photo> photos;
     private LocalDateTime createdAt;
-
 }
