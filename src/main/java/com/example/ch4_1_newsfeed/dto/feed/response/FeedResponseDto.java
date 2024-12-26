@@ -1,10 +1,7 @@
-package com.example.ch4_1_newsfeed.dto.feed;
+package com.example.ch4_1_newsfeed.dto.feed.response;
 
-import com.example.ch4_1_newsfeed.entity.Feed;
-import com.example.ch4_1_newsfeed.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDateTime;
 
