@@ -5,7 +5,6 @@ import com.example.ch4_1_newsfeed.dto.user.response.*;
 import com.example.ch4_1_newsfeed.dto.user.request.*;
 import com.example.ch4_1_newsfeed.service.AuthService;
 import com.example.ch4_1_newsfeed.service.UserService;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -16,7 +15,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @Controller

@@ -4,11 +4,9 @@ import com.example.ch4_1_newsfeed.dto.feed.response.FindAllFeedResponseDto;
 import com.example.ch4_1_newsfeed.entity.Feed;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.NativeQuery;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;

@@ -15,7 +15,6 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -70,7 +69,7 @@ public class FeedController {
      */
     @GetMapping("/{user_id}")
     public ResponseEntity<List> findByUserId(
-        @Valid @NotNull @Positive(message = "user_id는 양의 정수여야 합니다.") @PathVariable Long user_id,
+        @Valid @NotNull @Positive(message = "user_id는 양의 정수여야 합니다.") @PathVariable Long userId,
         @Valid @NotNull(message = "page가 포함되어야 합니다.") @PositiveOrZero(message = "page는 양의 정수 또는 0이여야 합니다.") @RequestParam int page,
         @Valid @Positive(message = "size는 양의 정수여야 합니다.") @RequestParam(defaultValue = "10") int size
     ) {
