@@ -18,10 +18,7 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.List;
 
@@ -68,10 +65,10 @@ public class FeedService {
     /**
      * 특정 id 뉴스피드 조회
      */
-    public List<FindByUserIdResponseDto> findByUserId(Long user_id, int page, int size) {
+    public List<FindByUserIdResponseDto> findByUserId(Long userId, int page, int size) {
         PageRequest pageRequest = PageRequest.of(page, size);
 
-        return feedRepository.findAllByUserId(user_id,pageRequest).stream()
+        return feedRepository.findAllByUserId(userId,pageRequest).stream()
                 .map(feed -> FindByUserIdResponseDto.from(feed, photoRepository.findPhotoByFeedId(feed.getId())
                 )).toList();
     }
