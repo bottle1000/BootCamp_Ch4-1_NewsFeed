@@ -1,5 +1,6 @@
 package com.example.ch4_1_newsfeed.service;
 
+import com.example.ch4_1_newsfeed.SessionConst;
 import com.example.ch4_1_newsfeed.dto.user.response.*;
 import com.example.ch4_1_newsfeed.dto.user.request.*;
 import com.example.ch4_1_newsfeed.encode.PasswordEncoder;
@@ -11,6 +12,7 @@ import com.example.ch4_1_newsfeed.repository.RelationshipRepository;
 import com.example.ch4_1_newsfeed.repository.UserRepository;
 import jakarta.servlet.http.HttpSession;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +27,7 @@ public class UserService {
     private final FeedRepository feedRepository;
     private final PasswordEncoder passwordEncoder;
     private final RelationshipRepository relationshipRepository;
+    private final HttpSession session;
 
     /**
      * 유저의 이메일로 유저 아이디를 찾음.
@@ -64,14 +67,6 @@ public class UserService {
         return SignUpUserResponseDto.from(user);
     }
 
-    public ProfileUserResponseDto getMyProfile(Long id) {
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new IllegalStateException("내 정보가 존재하지 않습니다."));
-        List<Feed> feedList = feedRepository.findAllByUserId(user.getId());
-
-        return ProfileUserResponseDto.from(user, feedList);
-    }
-
     // 트랜잭셔널 추가
     @Transactional
     public UpdateUserResponseDto updateMyProfile(Long userId, UpdateUserRequestDto request) {
@@ -86,13 +81,6 @@ public class UserService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalStateException("내 정보가 존재하지 않습니다."));
         user.updateUserPassword(request);
-    }
-
-    public ProfileUserResponseDto getUserProfile(Long id) {
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new IllegalStateException("찾으시는 사용자가 존재하지 않습니다."));
-        List<Feed> feedList = feedRepository.findAllByUserId(user.getId());
-        return ProfileUserResponseDto.from(user, feedList);
     }
 
     public void deleteUser(Long userId, DeleteUserRequestDto request) {

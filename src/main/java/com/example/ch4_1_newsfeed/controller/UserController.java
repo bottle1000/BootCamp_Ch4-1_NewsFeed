@@ -52,17 +52,6 @@ public class UserController {
     }
 
     /**
-     * 내 프로필 조회
-     */
-    @GetMapping("/me")
-    public ResponseEntity<ProfileUserResponseDto> getMyProfile(HttpSession session) {
-        Long userId = (Long) session.getAttribute("userId");
-        ProfileUserResponseDto myProfile = userService.getMyProfile(userId);
-
-        return new ResponseEntity<>(myProfile, HttpStatus.OK);
-    }
-
-    /**
      * 내 프로필 수정
      */
     @PutMapping("/me")
@@ -86,20 +75,6 @@ public class UserController {
         userService.updateMyPassword(userId, request);
 
         return new ResponseEntity<>(HttpStatus.OK);
-    }
-
-    /**
-     * 다른 유저 프로필 조회
-     */
-
-    @GetMapping("/{id}")
-    @Validated
-    public ResponseEntity<ProfileUserResponseDto> getUserProfile(
-        @PathVariable @NotNull(message = "id가 포함되어야 합니다.") @Positive(message = "id는 양의 정수여야 합니다.") Long id
-    ) {
-        ProfileUserResponseDto userProfile = userService.getUserProfile(id);
-
-        return new ResponseEntity<>(userProfile, HttpStatus.OK);
     }
 
     /**

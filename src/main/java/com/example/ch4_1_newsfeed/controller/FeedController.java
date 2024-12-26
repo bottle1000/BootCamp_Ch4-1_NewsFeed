@@ -1,12 +1,15 @@
 package com.example.ch4_1_newsfeed.controller;
 
+import com.example.ch4_1_newsfeed.SessionConst;
 import com.example.ch4_1_newsfeed.dto.feed.request.FeedRequestDto;
 import com.example.ch4_1_newsfeed.dto.feed.request.ModifyFeedRequestDto;
 import com.example.ch4_1_newsfeed.dto.feed.response.FeedResponseDto;
 import com.example.ch4_1_newsfeed.dto.feed.response.FindAllFeedResponseDto;
 import com.example.ch4_1_newsfeed.dto.feed.response.FindByUserAndFeedIdResponseDto;
 import com.example.ch4_1_newsfeed.dto.feed.response.FindByUserIdResponseDto;
+import com.example.ch4_1_newsfeed.dto.user.response.ProfileUserResponseDto;
 import com.example.ch4_1_newsfeed.service.FeedService;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -69,6 +72,20 @@ public class FeedController {
         List<FindByUserIdResponseDto> responseDtos = feedService.findByUserId(user_id, page, size);
 
         return new ResponseEntity<>(responseDtos, HttpStatus.OK);
+    }
+
+    /**
+     * 내 id 뉴스피드 조회
+     */
+    @GetMapping("/me")
+    public ResponseEntity<ProfileUserResponseDto> getMyProfile(
+            HttpSession session,
+            @Valid @NotNull(message = "page가 포함되어야 합니다.") @Positive(message = "page는 양의 정수여야 합니다.") @RequestParam int page,
+            @Valid @Positive(message = "size는 양의 정수여야 합니다.") @RequestParam int size) {
+        Long userId = (Long) session.getAttribute(SessionConst.LOGIN_USER);
+        ProfileUserResponseDto myProfile = feedService.getMyProfile(userId, page, size);
+
+        return new ResponseEntity<>(myProfile, HttpStatus.OK);
     }
 
     /**

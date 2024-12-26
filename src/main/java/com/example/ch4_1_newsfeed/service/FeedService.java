@@ -6,6 +6,7 @@ import com.example.ch4_1_newsfeed.dto.feed.response.FeedResponseDto;
 import com.example.ch4_1_newsfeed.dto.feed.response.FindAllFeedResponseDto;
 import com.example.ch4_1_newsfeed.dto.feed.response.FindByUserAndFeedIdResponseDto;
 import com.example.ch4_1_newsfeed.dto.feed.response.FindByUserIdResponseDto;
+import com.example.ch4_1_newsfeed.dto.user.response.ProfileUserResponseDto;
 import com.example.ch4_1_newsfeed.entity.Feed;
 import com.example.ch4_1_newsfeed.entity.Photo;
 import com.example.ch4_1_newsfeed.entity.User;
@@ -17,7 +18,10 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.List;
 
@@ -96,6 +100,19 @@ public class FeedService {
                 photos,
                 byIdAndId.getCreatedAt()
         );
+    }
+
+    /**
+     * 내 id 뉴스피드 조회
+     */
+    public ProfileUserResponseDto getMyProfile(Long id, int page, int size) {
+        PageRequest pageRequest = PageRequest.of(page, size);
+
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new IllegalStateException("내 정보가 존재하지 않습니다."));
+        List<Feed> feedList = feedRepository.findAllByUserId(user.getId(), pageRequest);
+
+        return ProfileUserResponseDto.from(user, feedList);
     }
 
     /**
