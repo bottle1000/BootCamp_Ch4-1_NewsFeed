@@ -16,7 +16,6 @@ public class ProfileUserResponseDto {
     private String pictureUrl;
     private List<Feed> feeds;
 
-
     /**
      * 정적 팩토리 메소드
      * @param user

@@ -31,6 +31,7 @@ public class UserService {
 
     /**
      * 유저의 이메일로 유저 아이디를 찾음.
+     *
      * @param
      * @return
      */
@@ -42,6 +43,7 @@ public class UserService {
 
     /**
      * 로그인 기능 추가
+     *
      * @param : 이메일, encode 된 비밀번호 포함
      */
     public UserResponseDto loginUser(LoginUserRequestDto request) {
@@ -58,7 +60,7 @@ public class UserService {
 
     public SignUpUserResponseDto createUser(SignUpUserRequestDto request) {
         String encodedPassword = passwordEncoder.encode(request.getPassword());
-        User user = User.createUser(request,encodedPassword);
+        User user = User.createUser(request, encodedPassword);
         /**
          * 비밀번호 암호화 기능 추가
          */
@@ -111,7 +113,7 @@ public class UserService {
 
             Relationship relationship = new Relationship(following, followed);
             relationshipRepository.save(relationship);
-            return new RelationshipResponseDto(following,followed,"you followed " + followed.getName());
+            return new RelationshipResponseDto(following, followed, "you followed " + followed.getName());
 
         }
 

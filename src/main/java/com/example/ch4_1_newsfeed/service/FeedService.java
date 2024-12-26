@@ -76,7 +76,7 @@ public class FeedService {
     public List<FindByUserIdResponseDto> findByUserId(Long user_id, int page, int size) {
         PageRequest pageRequest = PageRequest.of(page, size);
 
-        return feedRepository.findAllByUserId(user_id,pageRequest).stream()
+        return feedRepository.findAllByUserId(user_id, pageRequest).stream()
                 .map(feed -> new FindByUserIdResponseDto(
                         feed.getId(),
                         feed.getUser().getName(),

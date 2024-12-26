@@ -32,8 +32,8 @@ public class RequestExceptionWrapperAOP {
      * @param e
      */
     @AfterThrowing(
-        pointcut = "execution(* com.example.ch4_1_newsfeed.controller.*.*(..))",
-        throwing = "e"
+            pointcut = "execution(* com.example.ch4_1_newsfeed.controller.*.*(..))",
+            throwing = "e"
     )
     public void wrapMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException e) {
         throw new ResponseException("입력값 타입이 올바르지 않습니다.", HttpStatus.BAD_REQUEST);
@@ -44,18 +44,18 @@ public class RequestExceptionWrapperAOP {
      * IllegalStateException 이 여러 상황에 사용될 수 있는 것을 고려해 이에 맞는 형식의 응답을 반환할 수 있도록 함
      */
     @AfterThrowing(
-        pointcut = "execution(* com.example.ch4_1_newsfeed.service.*.*(..))"
-            + " && execution(* com.example.ch4_1_newsfeed.service.*.*(..))",
-        throwing = "e"
+            pointcut = "execution(* com.example.ch4_1_newsfeed.service.*.*(..))"
+                    + " && execution(* com.example.ch4_1_newsfeed.service.*.*(..))",
+            throwing = "e"
     )
     public Object wrapIllegalStateException(IllegalStateException e) {
-            HttpStatus status = HttpStatus.BAD_REQUEST;
-            // IllegalStateException 활용 방식이 늘어나면 switch문으로 변경할 것
-            if (e.getMessage().equals("내 정보가 존재하지 않습니다.")) {
-                status = HttpStatus.NOT_FOUND;
-            }
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        // IllegalStateException 활용 방식이 늘어나면 switch문으로 변경할 것
+        if (e.getMessage().equals("내 정보가 존재하지 않습니다.")) {
+            status = HttpStatus.NOT_FOUND;
+        }
 
-            throw new ResponseException(e.getMessage(), status);
+        throw new ResponseException(e.getMessage(), status);
 
     }
 
@@ -65,8 +65,8 @@ public class RequestExceptionWrapperAOP {
      * @param e
      */
     @AfterThrowing(
-        pointcut = "execution(* com.example.ch4_1_newsfeed.repository.*.*(..))",
-        throwing = "e"
+            pointcut = "execution(* com.example.ch4_1_newsfeed.repository.*.*(..))",
+            throwing = "e"
     )
     public void wrapDataIntegrityViolationException(DataIntegrityViolationException e) {
         throw new ResponseException("데이터 일관성 문제", HttpStatus.BAD_REQUEST);
@@ -75,11 +75,12 @@ public class RequestExceptionWrapperAOP {
     /**
      * JPA 쿼리 매개변수로 NULL이 들어갈 경우 발생하는 예외 래핑
      * 가능하면 사용되지 않도록 구현할 것
+     *
      * @param e
      */
     @AfterThrowing(
-        pointcut = "execution(* com.example.ch4_1_newsfeed.repository.*.*(..))",
-        throwing = "e"
+            pointcut = "execution(* com.example.ch4_1_newsfeed.repository.*.*(..))",
+            throwing = "e"
     )
     public void wrapInvalidDataAccessApiUsageException(InvalidDataAccessApiUsageException e) {
         throw new ResponseException("필요한 데이터가 존재하지 않습니다.", HttpStatus.BAD_REQUEST);
@@ -92,8 +93,8 @@ public class RequestExceptionWrapperAOP {
      * @param e
      */
     @AfterThrowing(
-        pointcut = "execution(* com.example.ch4_1_newsfeed.repository.*.*(..))",
-        throwing = "e"
+            pointcut = "execution(* com.example.ch4_1_newsfeed.repository.*.*(..))",
+            throwing = "e"
     )
     public void wrapEmptyResultDataAccessException(EmptyResultDataAccessException e) {
         throw new ResponseException("해당 값이 존재하지 않습니다.", HttpStatus.NOT_FOUND);
@@ -107,8 +108,8 @@ public class RequestExceptionWrapperAOP {
      */
 
     @AfterThrowing(
-        pointcut = "execution(* com.example.ch4_1_newsfeed.repository.*.*(..))",
-        throwing = "e"
+            pointcut = "execution(* com.example.ch4_1_newsfeed.repository.*.*(..))",
+            throwing = "e"
     )
     public void wrapIncorrectResultSizeDataAccessException(IncorrectResultSizeDataAccessException e) {
         throw new ResponseException("값의 수가 예상보다 많습니다.", HttpStatus.CONFLICT);
@@ -119,10 +120,10 @@ public class RequestExceptionWrapperAOP {
      */
 
     @AfterThrowing(
-        pointcut = "execution(* com.example.ch4_1_newsfeed.controller.*.*(..))"
-            + "execution(* com.example.ch4_1_newsfeed.service.*.*(..))"
-            + "execution(* com.example.ch4_1_newsfeed.repository.*.*(..))",
-        throwing = "e"
+            pointcut = "execution(* com.example.ch4_1_newsfeed.controller.*.*(..))"
+                    + "execution(* com.example.ch4_1_newsfeed.service.*.*(..))"
+                    + "execution(* com.example.ch4_1_newsfeed.repository.*.*(..))",
+            throwing = "e"
     )
     public void wrapRuntimeException(RuntimeException e) {
         log.info("exception: {}, message: {}", e.getClass().getName(), e.getMessage());

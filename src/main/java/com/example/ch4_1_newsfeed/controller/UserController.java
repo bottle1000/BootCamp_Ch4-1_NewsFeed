@@ -56,7 +56,7 @@ public class UserController {
      */
     @PutMapping("/me")
     public ResponseEntity<UpdateUserResponseDto> updateMyProfile(
-        HttpSession session, @Valid @RequestBody UpdateUserRequestDto request
+            HttpSession session, @Valid @RequestBody UpdateUserRequestDto request
     ) {
         Long userId = (Long) session.getAttribute("userId");
         UpdateUserResponseDto userUpdateDto = userService.updateMyProfile(userId, request);
@@ -69,7 +69,7 @@ public class UserController {
      */
     @PutMapping("/me/password")
     public ResponseEntity<Void> updateMyPassword(
-        HttpSession session, @Valid @ModelAttribute UpdatePasswordUserRequestDto request
+            HttpSession session, @Valid @ModelAttribute UpdatePasswordUserRequestDto request
     ) {
         Long userId = (Long) session.getAttribute("userId");
         userService.updateMyPassword(userId, request);

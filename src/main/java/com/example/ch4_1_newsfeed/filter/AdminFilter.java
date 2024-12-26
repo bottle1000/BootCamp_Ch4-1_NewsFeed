@@ -37,7 +37,7 @@ public class AdminFilter implements Filter {
             HttpSession session = request.getSession();
 
             if (session == null || session.getAttribute("role") == null ||
-            !UserType.ADMIN.name().equals(session.getAttribute("role"))) {
+                    !UserType.ADMIN.name().equals(session.getAttribute("role"))) {
                 response.sendError(HttpServletResponse.SC_FORBIDDEN, "You do not have permission to access this resource");
 
             }

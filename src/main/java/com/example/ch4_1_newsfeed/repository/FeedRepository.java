@@ -27,7 +27,7 @@ public interface FeedRepository extends JpaRepository<Feed, Long> {
      */
     Feed findByIdAndId(Long user_id, Long feed_id);
 
-//    @Query("select new com.example.ch4_1_newsfeed.dto.feed.response.FindAllFeedResponseDto(" +
+    //    @Query("select new com.example.ch4_1_newsfeed.dto.feed.response.FindAllFeedResponseDto(" +
 //            "f.id, u.id, f.contents, f.createdAt, " +
 //            "(select group_concat(p.URL) from Photo p where p.feed.id = f.id)" +
 //            ") " +

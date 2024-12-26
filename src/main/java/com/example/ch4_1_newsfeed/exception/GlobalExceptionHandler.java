@@ -30,8 +30,8 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Map<String, String>> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
         Map<String, String> body = new HashMap<>();
         String message = e.getBindingResult().getAllErrors().stream()
-            .map(ObjectError::getDefaultMessage)
-            .collect(Collectors.joining("\n"));
+                .map(ObjectError::getDefaultMessage)
+                .collect(Collectors.joining("\n"));
         body.put("message", message);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(body);
     }
@@ -40,8 +40,8 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Map<String, String>> handleHandlerMethodValidationException(HandlerMethodValidationException e) {
         Map<String, String> body = new HashMap<>();
         String messages = Arrays.stream(e.getDetailMessageArguments())
-            .map(Object::toString)
-            .collect(Collectors.joining("\n"));
+                .map(Object::toString)
+                .collect(Collectors.joining("\n"));
         body.put("message", messages);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(body);
     }
