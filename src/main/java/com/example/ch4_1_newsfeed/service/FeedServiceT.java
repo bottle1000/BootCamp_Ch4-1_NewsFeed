@@ -8,7 +8,6 @@ import com.example.ch4_1_newsfeed.dto.feed.response.FindByUserIdResponseDto;
 import com.example.ch4_1_newsfeed.entity.Feed;
 import com.example.ch4_1_newsfeed.entity.Photo;
 import com.example.ch4_1_newsfeed.repository.FeedRepository;
-import com.example.ch4_1_newsfeed.repository.FeedRepositoryImpl;
 import com.example.ch4_1_newsfeed.repository.PhotoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,7 +18,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class FeedServiceT {
 
-    private final FeedRepositoryImpl feedRepositoryImpl;
     private final FeedRepository feedRepository;
     private final PhotoRepository photoRepository;
 
@@ -76,7 +74,7 @@ public class FeedServiceT {
      * 피드 수정
      */
     public FeedResponseDto updateFeed(Long feed_id, ModifyFeedRequestDto dto) {
-        Feed feed = feedRepositoryImpl.findByFeedId(feed_id)
+        Feed feed = feedRepository.findById(feed_id)
                 .orElseThrow(() -> new IllegalArgumentException("NOT FOUND"));
 
         feed.updateFeed(dto.getContents());
