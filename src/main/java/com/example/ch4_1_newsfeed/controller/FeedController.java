@@ -61,10 +61,12 @@ public class FeedController {
      */
     @GetMapping("/{user_id}")
     public ResponseEntity<List> findByUserId(
-        @Valid @NotNull @Positive(message = "user_id는 양의 정수여야 합니다.") @PathVariable Long user_id
+        @Valid @NotNull @Positive(message = "user_id는 양의 정수여야 합니다.") @PathVariable Long user_id,
+        @Valid @NotNull(message = "page가 포함되어야 합니다.") @Positive(message = "page는 양의 정수여야 합니다.") @RequestParam int page,
+        @Valid @Positive(message = "size는 양의 정수여야 합니다.") @RequestParam int size
     ) {
 
-        List<FindByUserIdResponseDto> responseDtos = feedService.findByUserId(user_id);
+        List<FindByUserIdResponseDto> responseDtos = feedService.findByUserId(user_id, page, size);
 
         return new ResponseEntity<>(responseDtos, HttpStatus.OK);
     }
