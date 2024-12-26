@@ -69,8 +69,10 @@ public class FeedService {
     /**
      * 특정 id 뉴스피드 조회
      */
-    public List<FindByUserIdResponseDto> findByUserId(Long user_id) {
-        return feedRepository.findAllByUserId(user_id).stream()
+    public List<FindByUserIdResponseDto> findByUserId(Long user_id, int page, int size) {
+        PageRequest pageRequest = PageRequest.of(page, size);
+
+        return feedRepository.findAllByUserId(user_id,pageRequest).stream()
                 .map(feed -> new FindByUserIdResponseDto(
                         feed.getId(),
                         feed.getUser().getName(),
