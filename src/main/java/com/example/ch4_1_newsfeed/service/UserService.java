@@ -1,10 +1,14 @@
 package com.example.ch4_1_newsfeed.service;
 
-import com.example.ch4_1_newsfeed.dto.user.response.*;
-import com.example.ch4_1_newsfeed.dto.user.request.*;
-import com.example.ch4_1_newsfeed.encode.PasswordEncoder;
-import com.example.ch4_1_newsfeed.entity.Relationship;
-import com.example.ch4_1_newsfeed.entity.User;
+import com.example.ch4_1_newsfeed.common.SessionConst;
+import com.example.ch4_1_newsfeed.common.encode.PasswordEncoder;
+import com.example.ch4_1_newsfeed.model.entity.Relationship;
+import com.example.ch4_1_newsfeed.model.entity.User;
+import com.example.ch4_1_newsfeed.model.dto.user.request.*;
+import com.example.ch4_1_newsfeed.model.dto.user.response.RelationshipResponseDto;
+import com.example.ch4_1_newsfeed.model.dto.user.response.SignUpUserResponseDto;
+import com.example.ch4_1_newsfeed.model.dto.user.response.UpdateUserResponseDto;
+import com.example.ch4_1_newsfeed.model.dto.user.response.UserResponseDto;
 import com.example.ch4_1_newsfeed.repository.FeedRepository;
 import com.example.ch4_1_newsfeed.repository.RelationshipRepository;
 import com.example.ch4_1_newsfeed.repository.UserRepository;
@@ -52,6 +56,11 @@ public class UserService {
         return UserResponseDto.from(user);
     }
 
+    /**
+     * 회원가입 기능 추가
+     * @param request
+     * @return
+     */
     public SignUpUserResponseDto createUser(SignUpUserRequestDto request) {
         String encodedPassword = passwordEncoder.encode(request.getPassword());
         User user = User.createUser(request,encodedPassword);
@@ -76,7 +85,8 @@ public class UserService {
     public void updateMyPassword(Long userId, UpdatePasswordUserRequestDto request) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalStateException("내 정보가 존재하지 않습니다."));
-        user.updateUserPassword(request);
+        String encodePassword = passwordEncoder.encode(request.getPassword());
+        user.updateUserPassword(encodePassword);
     }
 
     public void deleteUser(Long userId, DeleteUserRequestDto request) {
@@ -95,7 +105,7 @@ public class UserService {
      */
     public RelationshipResponseDto follow(Long followeeId, HttpSession session) {
 
-        Long userId = (Long) session.getAttribute("user");
+        Long userId = (Long) session.getAttribute(SessionConst.LOGIN_USER);
         User following = userRepository.findById(userId).orElseThrow();
         User followed = userRepository.findById(followeeId).orElseThrow();
 

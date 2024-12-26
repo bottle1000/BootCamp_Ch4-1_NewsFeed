@@ -1,7 +1,7 @@
 package com.example.ch4_1_newsfeed.repository;
 
-import com.example.ch4_1_newsfeed.dto.feed.response.FindAllFeedResponseDto;
-import com.example.ch4_1_newsfeed.entity.Feed;
+import com.example.ch4_1_newsfeed.model.dto.feed.response.FindAllFeedResponseDto;
+import com.example.ch4_1_newsfeed.model.entity.Feed;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.NativeQuery;
 import org.springframework.data.repository.query.Param;

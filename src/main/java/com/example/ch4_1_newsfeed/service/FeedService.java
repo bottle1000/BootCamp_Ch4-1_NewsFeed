@@ -1,15 +1,15 @@
 package com.example.ch4_1_newsfeed.service;
 
-import com.example.ch4_1_newsfeed.SessionConst;
-import com.example.ch4_1_newsfeed.dto.feed.request.ModifyFeedRequestDto;
-import com.example.ch4_1_newsfeed.dto.feed.response.FeedResponseDto;
-import com.example.ch4_1_newsfeed.dto.feed.response.FindAllFeedResponseDto;
-import com.example.ch4_1_newsfeed.dto.feed.response.FindByUserAndFeedIdResponseDto;
-import com.example.ch4_1_newsfeed.dto.feed.response.FindByUserIdResponseDto;
-import com.example.ch4_1_newsfeed.dto.user.response.ProfileUserResponseDto;
-import com.example.ch4_1_newsfeed.entity.Feed;
-import com.example.ch4_1_newsfeed.entity.Photo;
-import com.example.ch4_1_newsfeed.entity.User;
+import com.example.ch4_1_newsfeed.common.SessionConst;
+import com.example.ch4_1_newsfeed.model.dto.feed.request.ModifyFeedRequestDto;
+import com.example.ch4_1_newsfeed.model.dto.feed.response.FeedResponseDto;
+import com.example.ch4_1_newsfeed.model.dto.feed.response.FindAllFeedResponseDto;
+import com.example.ch4_1_newsfeed.model.dto.feed.response.FindByUserAndFeedIdResponseDto;
+import com.example.ch4_1_newsfeed.model.dto.feed.response.FindByUserIdResponseDto;
+import com.example.ch4_1_newsfeed.model.dto.user.response.ProfileUserResponseDto;
+import com.example.ch4_1_newsfeed.model.entity.Feed;
+import com.example.ch4_1_newsfeed.model.entity.Photo;
+import com.example.ch4_1_newsfeed.model.entity.User;
 import com.example.ch4_1_newsfeed.repository.FeedRepository;
 import com.example.ch4_1_newsfeed.repository.PhotoRepository;
 import com.example.ch4_1_newsfeed.repository.RelationshipRepository;

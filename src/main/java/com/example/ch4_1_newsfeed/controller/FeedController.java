@@ -1,13 +1,13 @@
 package com.example.ch4_1_newsfeed.controller;
 
-import com.example.ch4_1_newsfeed.SessionConst;
-import com.example.ch4_1_newsfeed.dto.feed.request.FeedRequestDto;
-import com.example.ch4_1_newsfeed.dto.feed.request.ModifyFeedRequestDto;
-import com.example.ch4_1_newsfeed.dto.feed.response.FeedResponseDto;
-import com.example.ch4_1_newsfeed.dto.feed.response.FindAllFeedResponseDto;
-import com.example.ch4_1_newsfeed.dto.feed.response.FindByUserAndFeedIdResponseDto;
-import com.example.ch4_1_newsfeed.dto.feed.response.FindByUserIdResponseDto;
-import com.example.ch4_1_newsfeed.dto.user.response.ProfileUserResponseDto;
+import com.example.ch4_1_newsfeed.common.SessionConst;
+import com.example.ch4_1_newsfeed.model.dto.feed.request.FeedRequestDto;
+import com.example.ch4_1_newsfeed.model.dto.feed.request.ModifyFeedRequestDto;
+import com.example.ch4_1_newsfeed.model.dto.feed.response.FeedResponseDto;
+import com.example.ch4_1_newsfeed.model.dto.feed.response.FindAllFeedResponseDto;
+import com.example.ch4_1_newsfeed.model.dto.feed.response.FindByUserAndFeedIdResponseDto;
+import com.example.ch4_1_newsfeed.model.dto.feed.response.FindByUserIdResponseDto;
+import com.example.ch4_1_newsfeed.model.dto.user.response.ProfileUserResponseDto;
 import com.example.ch4_1_newsfeed.service.FeedService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
