@@ -15,7 +15,6 @@ import com.example.ch4_1_newsfeed.repository.PhotoRepository;
 import com.example.ch4_1_newsfeed.repository.UserRepository;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
@@ -53,7 +52,7 @@ public class FeedService {
      * 게시글마다 사진 리스트 생성자에 주입
      * 페이지네이션 적용 필요함
      */
-    public Page<FindAllFeedResponseDto> findAllFeeds(int page, int size) {
+    public List<FindAllFeedResponseDto> findAllFeeds(int page, int size) {
         // Feed 데이터를 모두 가져옴 (실제 서비스에서는 페이징 적용 필요)
         Long userId = (Long) session.getAttribute(SessionConst.LOGIN_USER);
         PageRequest pageRequest = PageRequest.of(page, size);
