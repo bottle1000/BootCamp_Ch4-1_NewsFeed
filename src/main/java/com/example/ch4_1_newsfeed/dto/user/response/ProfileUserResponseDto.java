@@ -19,9 +19,6 @@ public class ProfileUserResponseDto {
 
     /**
      * 정적 팩토리 메소드
-     * @param user
-     * @param userFeeds
-     * @return
      */
     public static ProfileUserResponseDto from(User user, List<Feed> userFeeds) {
         return new ProfileUserResponseDto(
