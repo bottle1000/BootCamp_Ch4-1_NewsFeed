@@ -1,6 +1,7 @@
 package com.example.ch4_1_newsfeed.controller;
 
 import com.example.ch4_1_newsfeed.dto.feed.request.FeedRequestDto;
+import com.example.ch4_1_newsfeed.dto.feed.request.ModifyFeedRequestDto;
 import com.example.ch4_1_newsfeed.dto.feed.response.FeedResponseDto;
 import com.example.ch4_1_newsfeed.dto.feed.response.FindAllFeedResponseDto;
 import com.example.ch4_1_newsfeed.dto.feed.response.FindByUserAndFeedIdResponseDto;
