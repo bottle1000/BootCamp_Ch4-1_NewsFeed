@@ -15,8 +15,6 @@ import com.example.ch4_1_newsfeed.repository.PhotoRepository;
 import com.example.ch4_1_newsfeed.repository.UserRepository;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
@@ -24,7 +22,6 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class FeedService {
 
     private final UserRepository userRepository;
@@ -59,12 +56,7 @@ public class FeedService {
         // Feed 데이터를 모두 가져옴 (실제 서비스에서는 페이징 적용 필요)
         Long userId = (Long) session.getAttribute(SessionConst.LOGIN_USER);
         PageRequest pageRequest = PageRequest.of(page, size);
-        List<FindAllFeedResponseDto> result = feedRepository.findFeedsByUserRelationships(userId, pageRequest);
-        // 테스트용 코드
-        for(FindAllFeedResponseDto dto : result) {
-            log.info(dto.toString());
-        }
-        return result;
+        return feedRepository.findFeedsByUserRelationships(userId, pageRequest);
     }
 
     /**
