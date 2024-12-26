@@ -1,17 +1,14 @@
 package com.example.ch4_1_newsfeed.dto.feed;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
+@AllArgsConstructor
 public class FeedRequestDto {
 
-    private final String contents;
-    private final String name;
-
-    public FeedRequestDto(String contents, String name) {
-        this.contents = contents;
-        this.name = name;
-    }
+    private String contents;
+    private String name;
 }
 
 

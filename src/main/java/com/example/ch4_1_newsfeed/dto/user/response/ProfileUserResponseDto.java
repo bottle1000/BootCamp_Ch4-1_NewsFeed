@@ -2,24 +2,19 @@ package com.example.ch4_1_newsfeed.dto.user.response;
 
 import com.example.ch4_1_newsfeed.entity.Feed;
 import com.example.ch4_1_newsfeed.entity.User;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.util.List;
 
 @Getter
+@AllArgsConstructor
 public class ProfileUserResponseDto {
 
     private Long id;
     private String name;
     private String pictureUrl;
     private List<Feed> feeds;
-
-    private ProfileUserResponseDto(Long id, String name, String pictureUrl, List<Feed> feeds) {
-        this.id = id;
-        this.name = name;
-        this.pictureUrl = pictureUrl;
-        this.feeds = feeds;
-    }
 
 
     /**
