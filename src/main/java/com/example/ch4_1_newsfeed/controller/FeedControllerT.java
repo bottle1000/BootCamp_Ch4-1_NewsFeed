@@ -8,6 +8,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,12 +28,13 @@ public class FeedControllerT {
      * - todo : page랑 size값 받아오기만 했고 구현은 추후에 할 예정
      */
     @GetMapping
-    public ResponseEntity<List<FindAllFeedResponseDto>> findAllFeeds(
+    public ResponseEntity<Page<FindAllFeedResponseDto>> findAllFeeds(
         @Valid @NotNull(message = "page가 포함되어야 합니다.") @Positive(message = "page는 양의 정수여야 합니다.") @RequestParam int page,
         @Valid @Positive(message = "size는 양의 정수여야 합니다.") @RequestParam int size
     ) {
-
-        return new ResponseEntity<>(feedServiceT.findAllFeeds(page, size), HttpStatus.OK);
+        Page<FindAllFeedResponseDto> allFeeds
+                = feedServiceT.findAllFeeds(page, size);
+        return new ResponseEntity<>(allFeeds, HttpStatus.OK);
     }
 
     /**
