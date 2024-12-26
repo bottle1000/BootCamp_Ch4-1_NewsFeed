@@ -16,7 +16,7 @@ public interface FeedRepository extends JpaRepository<Feed, Long> {
     /**
      * 유저 ID 기반으로 피드 데이터를 가져옴
      */
-    List<Feed> findAllByUserId(Long userId);
+    List<Feed> findAllByUserId(Long userId, Pageable pageable);
 
     default Feed findByIdOrElseThrow(Long id) {
         return findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Does not exist id = " + id));
