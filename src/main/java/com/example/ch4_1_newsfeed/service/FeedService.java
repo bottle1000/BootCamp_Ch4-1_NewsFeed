@@ -12,16 +12,12 @@ import com.example.ch4_1_newsfeed.entity.Photo;
 import com.example.ch4_1_newsfeed.entity.User;
 import com.example.ch4_1_newsfeed.repository.FeedRepository;
 import com.example.ch4_1_newsfeed.repository.PhotoRepository;
-import com.example.ch4_1_newsfeed.repository.RelationshipRepository;
 import com.example.ch4_1_newsfeed.repository.UserRepository;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.List;
 
@@ -32,7 +28,6 @@ public class FeedService {
     private final UserRepository userRepository;
     private final FeedRepository feedRepository;
     private final PhotoRepository photoRepository;
-    private final RelationshipRepository relationshipRepository;
     private final HttpSession session;
 
     /**
@@ -73,25 +68,25 @@ public class FeedService {
     /**
      * 특정 id 뉴스피드 조회
      */
-    public List<FindByUserIdResponseDto> findByUserId(Long user_id, int page, int size) {
+    public List<FindByUserIdResponseDto> findByUserId(Long userId, int page, int size) {
         PageRequest pageRequest = PageRequest.of(page, size);
 
-        return feedRepository.findAllByUserId(user_id, pageRequest).stream()
+        return feedRepository.findAllByUserId(userId, pageRequest).stream()
                 .map(feed -> new FindByUserIdResponseDto(
                         feed.getId(),
                         feed.getUser().getName(),
                         feed.getContents(),
                         feed.getCreatedAt(),
-                        photoRepository.findPhotoByFeed_id(feed.getId())
+                        photoRepository.findPhotoByFeedId(feed.getId())
                 )).toList();
     }
 
     /**
      * 특정 뉴스피드 조회
      */
-    public FindByUserAndFeedIdResponseDto findByUserAndFeed(Long user_id, Long feed_id) {
-        Feed byIdAndId = feedRepository.findByIdAndId(user_id, feed_id);
-        List<Photo> photos = photoRepository.findPhotoByFeed_id(feed_id);
+    public FindByUserAndFeedIdResponseDto findByUserAndFeed(Long userId, Long feedId) {
+        Feed byIdAndId = feedRepository.findByIdAndId(userId, feedId);
+        List<Photo> photos = photoRepository.findPhotoByFeedId(feedId);
 
         return new FindByUserAndFeedIdResponseDto(
                 byIdAndId.getId(),
@@ -118,8 +113,8 @@ public class FeedService {
     /**
      * 피드 수정
      */
-    public FeedResponseDto updateFeed(Long feed_id, ModifyFeedRequestDto dto) {
-        Feed feed = feedRepository.findById(feed_id)
+    public FeedResponseDto updateFeed(Long feedId, ModifyFeedRequestDto dto) {
+        Feed feed = feedRepository.findById(feedId)
                 .orElseThrow(() -> new IllegalArgumentException("NOT FOUND"));
 
         feed.updateFeed(dto.getContents());

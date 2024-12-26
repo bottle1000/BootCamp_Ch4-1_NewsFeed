@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface PhotoRepository extends JpaRepository<Photo, Long> {
 
-    List<Photo> findPhotoByFeed_id(Long id);
+    List<Photo> findPhotoByFeedId(Long id);
 
 
     @Query("select p from Photo p where p.feed.id in :feedIds")

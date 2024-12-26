@@ -52,7 +52,7 @@ public class FeedController {
     @GetMapping
     public ResponseEntity<Page<FindAllFeedResponseDto>> findAllFeeds(
             @Valid @NotNull(message = "page가 포함되어야 합니다.") @Positive(message = "page는 양의 정수여야 합니다.") @RequestParam int page,
-            @Valid @Positive(message = "size는 양의 정수여야 합니다.") @RequestParam int size
+            @Valid @Positive(message = "size는 양의 정수여야 합니다.") @RequestParam(defaultValue = "10") int size
     ) {
 
         Page<FindAllFeedResponseDto> allFeeds = feedService.findAllFeeds(page, size);
@@ -62,19 +62,19 @@ public class FeedController {
     /**
      * 특정 userId로 사용자의 피드를 조회<br>
      * 1페이지 10개 피드 출력
-     * @param user_id
+     * @param userId
      * @param page
      * @param size
      * @return
      */
     @GetMapping("/{user_id}")
     public ResponseEntity<List> findByUserId(
-            @Valid @NotNull @Positive(message = "user_id는 양의 정수여야 합니다.") @PathVariable Long user_id,
+            @Valid @NotNull @Positive(message = "user_id는 양의 정수여야 합니다.") @PathVariable Long userId,
             @Valid @NotNull(message = "page가 포함되어야 합니다.") @Positive(message = "page는 양의 정수여야 합니다.") @RequestParam int page,
-            @Valid @Positive(message = "size는 양의 정수여야 합니다.") @RequestParam int size
+            @Valid @Positive(message = "size는 양의 정수여야 합니다.") @RequestParam(defaultValue = "10") int size
     ) {
 
-        List<FindByUserIdResponseDto> responseDtos = feedService.findByUserId(user_id, page, size);
+        List<FindByUserIdResponseDto> responseDtos = feedService.findByUserId(userId, page, size);
 
         return new ResponseEntity<>(responseDtos, HttpStatus.OK);
     }
@@ -91,7 +91,7 @@ public class FeedController {
     public ResponseEntity<ProfileUserResponseDto> getMyProfile(
             HttpSession session,
             @Valid @NotNull(message = "page가 포함되어야 합니다.") @Positive(message = "page는 양의 정수여야 합니다.") @RequestParam int page,
-            @Valid @Positive(message = "size는 양의 정수여야 합니다.") @RequestParam int size) {
+            @Valid @Positive(message = "size는 양의 정수여야 합니다.") @RequestParam(defaultValue = "10") int size) {
         Long userId = (Long) session.getAttribute(SessionConst.LOGIN_USER);
         ProfileUserResponseDto myProfile = feedService.getMyProfile(userId, page, size);
 
@@ -100,39 +100,39 @@ public class FeedController {
 
     /**
      * 특정 user의 하나의 피드 조회 <br>
-     * @param user_id
-     * @param feed_id
+     * @param userId
+     * @param feedId
      * @return
      */
     @GetMapping("/{user_id}/{feed_id}")
-    public ResponseEntity findByUserAndFeedId(@PathVariable Long user_id, Long feed_id) {
+    public ResponseEntity findByUserAndFeedId(@PathVariable Long userId, Long feedId) {
 
-        FindByUserAndFeedIdResponseDto responseDtos = feedService.findByUserAndFeed(user_id, feed_id);
+        FindByUserAndFeedIdResponseDto responseDtos = feedService.findByUserAndFeed(userId, feedId);
 
         return new ResponseEntity(responseDtos, HttpStatus.OK);
     }
 
     /**
      * 본인 피드 수정
-     * @param feed_id
+     * @param feedId
      * @param dto
      * @return
      */
     @PutMapping("/{feed_id}")
-    public ResponseEntity<FeedResponseDto> modifyFeed(@PathVariable("feed_id") Long feed_id, @RequestBody ModifyFeedRequestDto dto) {
-        FeedResponseDto feedResponseDto = feedService.updateFeed(feed_id, dto);
+    public ResponseEntity<FeedResponseDto> modifyFeed(@PathVariable("feedId") Long feedId, @RequestBody ModifyFeedRequestDto dto) {
+        FeedResponseDto feedResponseDto = feedService.updateFeed(feedId, dto);
         return ResponseEntity.ok(feedResponseDto);
     }
 
     /**
      * 피드 삭제
-     * @param id
+     * @param feedId
      * @return
      */
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
+    @DeleteMapping("/{feed_id}")
+    public ResponseEntity<Void> delete(@PathVariable Long feedId) {
 
-        feedService.delete(id);
+        feedService.delete(feedId);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }

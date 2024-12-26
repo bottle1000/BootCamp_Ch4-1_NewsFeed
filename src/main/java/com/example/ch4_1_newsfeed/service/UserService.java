@@ -1,10 +1,8 @@
 package com.example.ch4_1_newsfeed.service;
 
-import com.example.ch4_1_newsfeed.SessionConst;
 import com.example.ch4_1_newsfeed.dto.user.response.*;
 import com.example.ch4_1_newsfeed.dto.user.request.*;
 import com.example.ch4_1_newsfeed.encode.PasswordEncoder;
-import com.example.ch4_1_newsfeed.entity.Feed;
 import com.example.ch4_1_newsfeed.entity.Relationship;
 import com.example.ch4_1_newsfeed.entity.User;
 import com.example.ch4_1_newsfeed.repository.FeedRepository;
@@ -12,11 +10,9 @@ import com.example.ch4_1_newsfeed.repository.RelationshipRepository;
 import com.example.ch4_1_newsfeed.repository.UserRepository;
 import jakarta.servlet.http.HttpSession;
 import lombok.AllArgsConstructor;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -106,7 +102,7 @@ public class UserService {
         User followed = userRepository.findById(followeeId).orElseThrow();
 
         Optional<Relationship> foundRelationship =
-                relationshipRepository.findRelationshipByFollower_IdAndFollowee_id
+                relationshipRepository.findRelationshipByFollowerIdAndFolloweeId
                         (following.getId(), followed.getId());
 
         if (foundRelationship.isEmpty()) {

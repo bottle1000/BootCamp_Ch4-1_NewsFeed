@@ -5,6 +5,5 @@ import lombok.Getter;
 @Getter
 public class ModifyFeedRequestDto {
 
-    private Long feed_id;
     private String contents;
 }
