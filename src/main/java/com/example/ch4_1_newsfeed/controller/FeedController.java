@@ -1,6 +1,7 @@
 package com.example.ch4_1_newsfeed.controller;
 
 import com.example.ch4_1_newsfeed.SessionConst;
+import com.example.ch4_1_newsfeed.dto.feed.request.FeedPagingRequestDto;
 import com.example.ch4_1_newsfeed.dto.feed.request.FeedRequestDto;
 import com.example.ch4_1_newsfeed.dto.feed.request.ModifyFeedRequestDto;
 import com.example.ch4_1_newsfeed.dto.feed.response.FeedResponseDto;
@@ -15,9 +16,9 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -33,7 +34,7 @@ public class FeedController {
      * 피드 생성
      */
     @PostMapping
-    public ResponseEntity<FeedResponseDto> save(@RequestBody FeedRequestDto requestDto) {
+    public ResponseEntity<FeedResponseDto> save(@Valid @RequestBody FeedRequestDto requestDto) {
 
         FeedResponseDto feedResponseDto =
                 feedService.save(
@@ -52,11 +53,10 @@ public class FeedController {
      */
     @GetMapping
     public ResponseEntity<List<FindAllFeedResponseDto>> findAllFeeds(
-        @Valid @NotNull(message = "page가 포함되어야 합니다.") @PositiveOrZero(message = "page는 양의 정수 또는 0여어야 합니다.") @RequestParam int page,
-        @Valid @Positive(message = "size는 양의 정수여야 합니다.") @RequestParam int size
-    ) {
+        @Valid @ModelAttribute FeedPagingRequestDto dto
+        ) {
 
-        List<FindAllFeedResponseDto> allFeeds = feedService.findAllFeeds(page,size);
+        List<FindAllFeedResponseDto> allFeeds = feedService.findAllFeeds(dto.getPage(), dto.getSize());
         return new ResponseEntity<>(allFeeds, HttpStatus.OK);
     }
 
@@ -66,11 +66,10 @@ public class FeedController {
     @GetMapping("/{user_id}")
     public ResponseEntity<List> findByUserId(
         @Valid @NotNull @Positive(message = "user_id는 양의 정수여야 합니다.") @PathVariable Long user_id,
-        @Valid @NotNull(message = "page가 포함되어야 합니다.") @PositiveOrZero(message = "page는 양의 정수 또는 0이여야 합니다.") @RequestParam int page,
-        @Valid @Positive(message = "size는 양의 정수여야 합니다.") @RequestParam int size
+        @Valid @ModelAttribute FeedPagingRequestDto dto
     ) {
 
-        List<FindByUserIdResponseDto> responseDtos = feedService.findByUserId(user_id, page, size);
+        List<FindByUserIdResponseDto> responseDtos = feedService.findByUserId(user_id, dto.getPage(), dto.getSize());
 
         return new ResponseEntity<>(responseDtos, HttpStatus.OK);
     }
@@ -81,15 +80,10 @@ public class FeedController {
     @GetMapping("/me")
     public ResponseEntity<ProfileUserResponseDto> getMyProfile(
             HttpSession session,
-            @Valid
-            @NotNull(message = "page가 포함되어야 합니다.")
-            @PositiveOrZero(message = "page는 양의 정수 또는 0이여야 합니다.")
-            @RequestParam int page,
-            @Valid
-            @Positive(message = "size는 양의 정수여야 합니다.")
-            @RequestParam int size) {
+            @Valid @ModelAttribute FeedPagingRequestDto dto
+    ){
         Long userId = (Long) session.getAttribute(SessionConst.LOGIN_USER);
-        ProfileUserResponseDto myProfile = feedService.getMyProfile(userId, page, size);
+        ProfileUserResponseDto myProfile = feedService.getMyProfile(userId, dto.getPage(), dto.getSize());
 
         return new ResponseEntity<>(myProfile, HttpStatus.OK);
     }
@@ -98,7 +92,10 @@ public class FeedController {
      * 특정 뉴스피드 조회
      */
     @GetMapping("/{user_id}/{feed_id}")
-    public ResponseEntity findByUserAndFeedId(@PathVariable Long user_id, Long feed_id) {
+    public ResponseEntity findByUserAndFeedId(
+        @PathVariable @Validated @NotNull(message = "id가 포함되어야 합니다") @Positive(message = "id는 양의 정수여야 합니다") Long user_id,
+        @PathVariable @Validated @NotNull(message = "id가 포함되어야 합니다") @Positive(message = "id는 양의 정수여야 합니다") Long feed_id
+    ) {
 
         FindByUserAndFeedIdResponseDto responseDtos = feedService.findByUserAndFeed(user_id, feed_id);
 
@@ -109,7 +106,10 @@ public class FeedController {
      * 피드 수정
      */
     @PutMapping("/{feed_id}")
-    public ResponseEntity<FeedResponseDto> modifyFeed(@PathVariable("feed_id") Long feed_id, @RequestBody ModifyFeedRequestDto dto) {
+    public ResponseEntity<FeedResponseDto> modifyFeed(
+        @PathVariable("feed_id") @Validated @NotNull(message = "id가 포함되어야 합니다") @Positive(message = "id는 양의 정수여야 합니다") Long feed_id,
+        @Valid @RequestBody ModifyFeedRequestDto dto
+    ) {
         FeedResponseDto feedResponseDto = feedService.updateFeed(feed_id, dto);
         return ResponseEntity.ok(feedResponseDto);
     }
@@ -118,7 +118,9 @@ public class FeedController {
      * 피드 삭제
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
+    public ResponseEntity<Void> delete(
+        @PathVariable @Validated @NotNull(message = "id가 포함되어야 합니다") @Positive(message = "id는 양의 정수여야 합니다") Long id
+    ) {
 
         feedService.delete(id);
 
