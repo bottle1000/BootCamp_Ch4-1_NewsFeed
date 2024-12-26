@@ -126,7 +126,10 @@ public class RequestExceptionWrapperAOP {
             throwing = "e"
     )
     public void wrapRuntimeException(RuntimeException e) {
-        log.info("exception: {}, message: {}", e.getClass().getName(), e.getMessage());
+        log.info(
+            "exception: {}, message: {}, stacktrace: {}",
+            e.getClass().getName(), e.getMessage(), e.getStackTrace()
+        );
         throw new ResponseException("서버 내부 에러", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

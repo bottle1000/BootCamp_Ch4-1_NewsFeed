@@ -13,6 +13,7 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -50,12 +51,12 @@ public class FeedController {
      * todo : page랑 size값 받아오기만 했고 구현은 추후에 할 예정
      */
     @GetMapping
-    public ResponseEntity<Page<FindAllFeedResponseDto>> findAllFeeds(
-            @Valid @NotNull(message = "page가 포함되어야 합니다.") @Positive(message = "page는 양의 정수여야 합니다.") @RequestParam int page,
-            @Valid @Positive(message = "size는 양의 정수여야 합니다.") @RequestParam(defaultValue = "10") int size
+    public ResponseEntity<List<FindAllFeedResponseDto>> findAllFeeds(
+        @Valid @NotNull(message = "page가 포함되어야 합니다.") @PositiveOrZero(message = "page는 양의 정수 또는 0여어야 합니다.") @RequestParam int page,
+        @Valid @Positive(message = "size는 양의 정수여야 합니다.") @RequestParam int size
     ) {
 
-        Page<FindAllFeedResponseDto> allFeeds = feedService.findAllFeeds(page, size);
+        List<FindAllFeedResponseDto> allFeeds = feedService.findAllFeeds(page,size);
         return new ResponseEntity<>(allFeeds, HttpStatus.OK);
     }
 
@@ -69,9 +70,9 @@ public class FeedController {
      */
     @GetMapping("/{user_id}")
     public ResponseEntity<List> findByUserId(
-            @Valid @NotNull @Positive(message = "user_id는 양의 정수여야 합니다.") @PathVariable Long userId,
-            @Valid @NotNull(message = "page가 포함되어야 합니다.") @Positive(message = "page는 양의 정수여야 합니다.") @RequestParam int page,
-            @Valid @Positive(message = "size는 양의 정수여야 합니다.") @RequestParam(defaultValue = "10") int size
+        @Valid @NotNull @Positive(message = "user_id는 양의 정수여야 합니다.") @PathVariable Long user_id,
+        @Valid @NotNull(message = "page가 포함되어야 합니다.") @PositiveOrZero(message = "page는 양의 정수 또는 0이여야 합니다.") @RequestParam int page,
+        @Valid @Positive(message = "size는 양의 정수여야 합니다.") @RequestParam(defaultValue = "10") int size
     ) {
 
         List<FindByUserIdResponseDto> responseDtos = feedService.findByUserId(userId, page, size);
@@ -90,8 +91,13 @@ public class FeedController {
     @GetMapping("/me")
     public ResponseEntity<ProfileUserResponseDto> getMyProfile(
             HttpSession session,
-            @Valid @NotNull(message = "page가 포함되어야 합니다.") @Positive(message = "page는 양의 정수여야 합니다.") @RequestParam int page,
-            @Valid @Positive(message = "size는 양의 정수여야 합니다.") @RequestParam(defaultValue = "10") int size) {
+            @Valid
+            @NotNull(message = "page가 포함되어야 합니다.")
+            @PositiveOrZero(message = "page는 양의 정수 또는 0이여야 합니다.")
+            @RequestParam int page,
+            @Valid
+            @Positive(message = "size는 양의 정수여야 합니다.")
+            @RequestParam(defaultValue = "10") int size) {
         Long userId = (Long) session.getAttribute(SessionConst.LOGIN_USER);
         ProfileUserResponseDto myProfile = feedService.getMyProfile(userId, page, size);
 
