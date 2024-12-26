@@ -1,6 +1,7 @@
 package com.example.ch4_1_newsfeed.service;
 
 import com.example.ch4_1_newsfeed.SessionConst;
+import com.example.ch4_1_newsfeed.dto.feed.request.ModifyFeedRequestDto;
 import com.example.ch4_1_newsfeed.dto.feed.response.FeedResponseDto;
 import com.example.ch4_1_newsfeed.dto.feed.response.FindAllFeedResponseDto;
 import com.example.ch4_1_newsfeed.dto.feed.response.FindByUserAndFeedIdResponseDto;
@@ -92,6 +93,23 @@ public class FeedService {
                 byIdAndId.getUser(),
                 photos,
                 byIdAndId.getCreatedAt()
+        );
+    }
+
+    /**
+     * 피드 수정
+     */
+    public FeedResponseDto updateFeed(Long feed_id, ModifyFeedRequestDto dto) {
+        Feed feed = feedRepository.findById(feed_id)
+                .orElseThrow(() -> new IllegalArgumentException("NOT FOUND"));
+
+        feed.updateFeed(dto.getContents());
+
+        return new FeedResponseDto(
+                feed.getId(),
+                feed.getUser().getName(),
+                feed.getContents(),
+                feed.getCreatedAt()
         );
     }
 

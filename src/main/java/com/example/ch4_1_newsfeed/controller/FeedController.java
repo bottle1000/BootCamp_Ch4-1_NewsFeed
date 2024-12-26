@@ -22,7 +22,7 @@ import java.util.List;
 @RequestMapping("/feeds")
 public class FeedController {
 
-    private final FeedService feedServiceT;
+    private final FeedService feedService;
 
     /**
      * 피드 생성
@@ -31,7 +31,7 @@ public class FeedController {
     public ResponseEntity<FeedResponseDto> save(@RequestBody FeedRequestDto requestDto) {
 
         FeedResponseDto feedResponseDto =
-                feedServiceT.save(
+                feedService.save(
                         requestDto.getContents(),
                         requestDto.getName()
                 );
@@ -51,7 +51,7 @@ public class FeedController {
         @Valid @Positive(message = "size는 양의 정수여야 합니다.") @RequestParam int size
     ) {
 
-        Page<FindAllFeedResponseDto> allFeeds = feedServiceT.findAllFeeds(page,size);
+        Page<FindAllFeedResponseDto> allFeeds = feedService.findAllFeeds(page,size);
         return new ResponseEntity<>(allFeeds, HttpStatus.OK);
     }
 
@@ -63,7 +63,7 @@ public class FeedController {
         @Valid @NotNull @Positive(message = "user_id는 양의 정수여야 합니다.") @PathVariable Long user_id
     ) {
 
-        List<FindByUserIdResponseDto> responseDtos = feedServiceT.findByUserId(user_id);
+        List<FindByUserIdResponseDto> responseDtos = feedService.findByUserId(user_id);
 
         return new ResponseEntity<>(responseDtos, HttpStatus.OK);
     }
@@ -74,7 +74,7 @@ public class FeedController {
     @GetMapping("/{user_id}/{feed_id}")
     public ResponseEntity findByUserAndFeedId(@PathVariable Long user_id, Long feed_id) {
 
-        FindByUserAndFeedIdResponseDto responseDtos = feedServiceT.findByUserAndFeed(user_id, feed_id);
+        FindByUserAndFeedIdResponseDto responseDtos = feedService.findByUserAndFeed(user_id, feed_id);
 
         return new ResponseEntity(responseDtos, HttpStatus.OK);
     }
@@ -94,7 +94,7 @@ public class FeedController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
 
-        feedServiceT.delete(id);
+        feedService.delete(id);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
