@@ -3,7 +3,6 @@ package com.example.ch4_1_newsfeed.repository;
 import com.example.ch4_1_newsfeed.entity.Photo;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
