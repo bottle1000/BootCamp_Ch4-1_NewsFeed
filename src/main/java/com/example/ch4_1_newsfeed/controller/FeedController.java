@@ -1,20 +1,19 @@
 package com.example.ch4_1_newsfeed.controller;
 
-import com.example.ch4_1_newsfeed.SessionConst;
+import com.example.ch4_1_newsfeed.common.SessionConst;
+import com.example.ch4_1_newsfeed.model.dto.feed.request.FeedRequestDto;
+import com.example.ch4_1_newsfeed.model.dto.feed.request.ModifyFeedRequestDto;
+import com.example.ch4_1_newsfeed.model.dto.feed.response.FeedResponseDto;
+import com.example.ch4_1_newsfeed.model.dto.feed.response.FindAllFeedResponseDto;
+import com.example.ch4_1_newsfeed.model.dto.feed.response.FindByUserAndFeedIdResponseDto;
+import com.example.ch4_1_newsfeed.model.dto.feed.response.FindByUserIdResponseDto;
+import com.example.ch4_1_newsfeed.model.dto.user.response.ProfileUserResponseDto;
 import com.example.ch4_1_newsfeed.dto.feed.request.FeedPagingRequestDto;
-import com.example.ch4_1_newsfeed.dto.feed.request.FeedRequestDto;
-import com.example.ch4_1_newsfeed.dto.feed.request.ModifyFeedRequestDto;
-import com.example.ch4_1_newsfeed.dto.feed.response.FeedResponseDto;
-import com.example.ch4_1_newsfeed.dto.feed.response.FindAllFeedResponseDto;
-import com.example.ch4_1_newsfeed.dto.feed.response.FindByUserAndFeedIdResponseDto;
-import com.example.ch4_1_newsfeed.dto.feed.response.FindByUserIdResponseDto;
-import com.example.ch4_1_newsfeed.dto.user.response.ProfileUserResponseDto;
 import com.example.ch4_1_newsfeed.service.FeedService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
-import jakarta.validation.constraints.PositiveOrZero;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -61,21 +60,29 @@ public class FeedController {
     }
 
     /**
-     * 특정 id로 뉴스피드 조회
+     * 특정 userId로 사용자의 피드를 조회<br>
+     * 1페이지 10개 피드 출력
+     * @param userId
+     * @param dto(page, size)
+     * @return
      */
     @GetMapping("/{user_id}")
     public ResponseEntity<List> findByUserId(
-        @Valid @NotNull @Positive(message = "user_id는 양의 정수여야 합니다.") @PathVariable Long user_id,
+        @Valid @NotNull @Positive(message = "user_id는 양의 정수여야 합니다.") @PathVariable Long userId,
         @Valid @ModelAttribute FeedPagingRequestDto dto
     ) {
 
-        List<FindByUserIdResponseDto> responseDtos = feedService.findByUserId(user_id, dto.getPage(), dto.getSize());
+        List<FindByUserIdResponseDto> responseDtos = feedService.findByUserId(userId, dto.getPage(), dto.getSize());
 
         return new ResponseEntity<>(responseDtos, HttpStatus.OK);
     }
 
     /**
-     * 내 id 뉴스피드 조회
+     * 본인 뉴스피드 조회 <br>
+     * 1페이지 10개 피드 출력
+     * @param session
+     * @param dto(page, size)
+     * @return
      */
     @GetMapping("/me")
     public ResponseEntity<ProfileUserResponseDto> getMyProfile(
@@ -89,40 +96,48 @@ public class FeedController {
     }
 
     /**
-     * 특정 뉴스피드 조회
+     * 특정 user의 하나의 피드 조회 <br>
+     * @param userId
+     * @param feedId
+     * @return
      */
     @GetMapping("/{user_id}/{feed_id}")
     public ResponseEntity findByUserAndFeedId(
-        @PathVariable @Validated @NotNull(message = "id가 포함되어야 합니다") @Positive(message = "id는 양의 정수여야 합니다") Long user_id,
-        @PathVariable @Validated @NotNull(message = "id가 포함되어야 합니다") @Positive(message = "id는 양의 정수여야 합니다") Long feed_id
+        @PathVariable @Validated @NotNull(message = "id가 포함되어야 합니다") @Positive(message = "id는 양의 정수여야 합니다") Long userId,
+        @PathVariable @Validated @NotNull(message = "id가 포함되어야 합니다") @Positive(message = "id는 양의 정수여야 합니다") Long feedId
     ) {
 
-        FindByUserAndFeedIdResponseDto responseDtos = feedService.findByUserAndFeed(user_id, feed_id);
+        FindByUserAndFeedIdResponseDto responseDtos = feedService.findByUserAndFeed(userId, feedId);
 
         return new ResponseEntity(responseDtos, HttpStatus.OK);
     }
 
     /**
-     * 피드 수정
+     * 본인 피드 수정
+     * @param feedId
+     * @param dto
+     * @return
      */
     @PutMapping("/{feed_id}")
     public ResponseEntity<FeedResponseDto> modifyFeed(
-        @PathVariable("feed_id") @Validated @NotNull(message = "id가 포함되어야 합니다") @Positive(message = "id는 양의 정수여야 합니다") Long feed_id,
+        @PathVariable("feed_id") @Validated @NotNull(message = "id가 포함되어야 합니다") @Positive(message = "id는 양의 정수여야 합니다") Long feedId,
         @Valid @RequestBody ModifyFeedRequestDto dto
     ) {
-        FeedResponseDto feedResponseDto = feedService.updateFeed(feed_id, dto);
+        FeedResponseDto feedResponseDto = feedService.updateFeed(feedId, dto);
         return ResponseEntity.ok(feedResponseDto);
     }
 
     /**
      * 피드 삭제
+     * @param feedId
+     * @return
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(
-        @PathVariable @Validated @NotNull(message = "id가 포함되어야 합니다") @Positive(message = "id는 양의 정수여야 합니다") Long id
+        @PathVariable @Validated @NotNull(message = "id가 포함되어야 합니다") @Positive(message = "id는 양의 정수여야 합니다") Long feedId
     ) {
 
-        feedService.delete(id);
+        feedService.delete(feedId);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }

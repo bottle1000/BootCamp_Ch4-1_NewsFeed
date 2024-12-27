@@ -1,17 +1,18 @@
 package com.example.ch4_1_newsfeed.service;
 
-import com.example.ch4_1_newsfeed.SessionConst;
-import com.example.ch4_1_newsfeed.dto.feed.request.ModifyFeedRequestDto;
-import com.example.ch4_1_newsfeed.dto.feed.response.FeedResponseDto;
-import com.example.ch4_1_newsfeed.dto.feed.response.FindAllFeedResponseDto;
-import com.example.ch4_1_newsfeed.dto.feed.response.FindByUserAndFeedIdResponseDto;
-import com.example.ch4_1_newsfeed.dto.feed.response.FindByUserIdResponseDto;
-import com.example.ch4_1_newsfeed.dto.user.response.ProfileUserResponseDto;
-import com.example.ch4_1_newsfeed.entity.Feed;
-import com.example.ch4_1_newsfeed.entity.Photo;
-import com.example.ch4_1_newsfeed.entity.User;
+import com.example.ch4_1_newsfeed.common.SessionConst;
+import com.example.ch4_1_newsfeed.model.dto.feed.request.ModifyFeedRequestDto;
+import com.example.ch4_1_newsfeed.model.dto.feed.response.FeedResponseDto;
+import com.example.ch4_1_newsfeed.model.dto.feed.response.FindAllFeedResponseDto;
+import com.example.ch4_1_newsfeed.model.dto.feed.response.FindByUserAndFeedIdResponseDto;
+import com.example.ch4_1_newsfeed.model.dto.feed.response.FindByUserIdResponseDto;
+import com.example.ch4_1_newsfeed.model.dto.user.response.ProfileUserResponseDto;
+import com.example.ch4_1_newsfeed.model.entity.Feed;
+import com.example.ch4_1_newsfeed.model.entity.Photo;
+import com.example.ch4_1_newsfeed.model.entity.User;
 import com.example.ch4_1_newsfeed.repository.FeedRepository;
 import com.example.ch4_1_newsfeed.repository.PhotoRepository;
+import com.example.ch4_1_newsfeed.repository.RelationshipRepository;
 import com.example.ch4_1_newsfeed.repository.UserRepository;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +28,7 @@ public class FeedService {
     private final UserRepository userRepository;
     private final FeedRepository feedRepository;
     private final PhotoRepository photoRepository;
+    private final RelationshipRepository relationshipRepository;
     private final HttpSession session;
 
     /**
@@ -62,20 +64,20 @@ public class FeedService {
     /**
      * 특정 id 뉴스피드 조회
      */
-    public List<FindByUserIdResponseDto> findByUserId(Long user_id, int page, int size) {
+    public List<FindByUserIdResponseDto> findByUserId(Long userId, int page, int size) {
         PageRequest pageRequest = PageRequest.of(page, size);
 
-        return feedRepository.findAllByUserId(user_id,pageRequest).stream()
-                .map(feed -> FindByUserIdResponseDto.from(feed, photoRepository.findPhotoByFeed_id(feed.getId())
+        return feedRepository.findAllByUserId(userId,pageRequest).stream()
+                .map(feed -> FindByUserIdResponseDto.from(feed, photoRepository.findPhotoByFeedId(feed.getId())
                 )).toList();
     }
 
     /**
      * 특정 뉴스피드 조회
      */
-    public FindByUserAndFeedIdResponseDto findByUserAndFeed(Long user_id, Long feed_id) {
-        Feed byIdAndId = feedRepository.findByIdAndId(user_id, feed_id);
-        List<Photo> photos = photoRepository.findPhotoByFeed_id(feed_id);
+    public FindByUserAndFeedIdResponseDto findByUserAndFeed(Long userId, Long feedId) {
+        Feed byIdAndId = feedRepository.findByIdAndId(userId, feedId);
+        List<Photo> photos = photoRepository.findPhotoByFeedId(feedId);
 
         return FindByUserAndFeedIdResponseDto.from(byIdAndId, photos);
     }
@@ -96,9 +98,10 @@ public class FeedService {
     /**
      * 피드 수정
      */
-    public FeedResponseDto updateFeed(Long feed_id, ModifyFeedRequestDto dto) {
-        Feed feed = feedRepository.findById(feed_id)
+    public FeedResponseDto updateFeed(Long feedId, ModifyFeedRequestDto dto) {
+        Feed feed = feedRepository.findById(feedId)
                 .orElseThrow(() -> new IllegalArgumentException("NOT FOUND"));
+
         feed.updateFeed(dto.getContents());
 
         return FeedResponseDto.from(feed);
