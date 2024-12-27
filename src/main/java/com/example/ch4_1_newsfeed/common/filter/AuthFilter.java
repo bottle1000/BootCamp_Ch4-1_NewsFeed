@@ -1,6 +1,7 @@
 package com.example.ch4_1_newsfeed.common.filter;
 
 import com.example.ch4_1_newsfeed.common.SessionConst;
+import com.example.ch4_1_newsfeed.common.exception.NotAuthorizedException;
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -33,7 +34,7 @@ public class AuthFilter implements Filter {
 
         HttpServletResponse httpResponse = (HttpServletResponse) response;
 
-        if (!isWhiteList(requestURI)) {
+        if (isNotWhiteList(requestURI)) {
 
             HttpSession session = httpRequest.getSession(false);
 
@@ -43,11 +44,11 @@ public class AuthFilter implements Filter {
             }
         }
 
-        filterChain.doFilter(request, response);
+        filterChain.doFilter(request,response);
     }
 
-    public boolean isWhiteList(String requestURI) {
-        return PatternMatchUtils.simpleMatch(WHITE_LIST, requestURI);
+    public boolean isNotWhiteList(String requestURI) {
+        return !PatternMatchUtils.simpleMatch(WHITE_LIST, requestURI);
     }
 }
 

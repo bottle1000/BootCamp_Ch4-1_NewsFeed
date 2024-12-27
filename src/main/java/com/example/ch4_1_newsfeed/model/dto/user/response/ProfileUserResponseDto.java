@@ -20,6 +20,7 @@ public class ProfileUserResponseDto {
      * 정적 팩토리 메소드
      */
     public static ProfileUserResponseDto from(User user, List<Feed> userFeeds) {
+
         return new ProfileUserResponseDto(
                 user.getId(),
                 user.getName(),

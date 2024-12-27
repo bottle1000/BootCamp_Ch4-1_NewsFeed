@@ -13,11 +13,11 @@ public class RelationshipResponseDto {
     private String message;
 
     // 정적 팩토리 메서드
-    public static RelationshipResponseDto of(User following, User followed) {
+    public static RelationshipResponseDto of(User following, User followed, String message) {
         return new RelationshipResponseDto(
                 following.getName(),
                 followed.getName(),
-                "you followed " + followed.getName()
+                message + followed.getName()
         );
     }
 }

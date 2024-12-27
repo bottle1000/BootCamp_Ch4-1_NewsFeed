@@ -2,10 +2,7 @@ package com.example.ch4_1_newsfeed.service;
 
 import com.example.ch4_1_newsfeed.common.SessionConst;
 import com.example.ch4_1_newsfeed.model.dto.feed.request.ModifyFeedRequestDto;
-import com.example.ch4_1_newsfeed.model.dto.feed.response.FeedResponseDto;
-import com.example.ch4_1_newsfeed.model.dto.feed.response.FindAllFeedResponseDto;
-import com.example.ch4_1_newsfeed.model.dto.feed.response.FindByUserAndFeedIdResponseDto;
-import com.example.ch4_1_newsfeed.model.dto.feed.response.FindByUserIdResponseDto;
+import com.example.ch4_1_newsfeed.model.dto.feed.response.*;
 import com.example.ch4_1_newsfeed.model.dto.user.response.ProfileUserResponseDto;
 import com.example.ch4_1_newsfeed.model.entity.Feed;
 import com.example.ch4_1_newsfeed.model.entity.Photo;
@@ -16,13 +13,18 @@ import com.example.ch4_1_newsfeed.repository.RelationshipRepository;
 import com.example.ch4_1_newsfeed.repository.UserRepository;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static com.example.ch4_1_newsfeed.common.SessionConst.LOGIN_USER;
+
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class FeedService {
 
     private final UserRepository userRepository;
@@ -54,22 +56,24 @@ public class FeedService {
      * 게시글마다 사진 리스트 생성자에 주입
      * 페이지네이션 적용 필요함
      */
-    public List<FindAllFeedResponseDto> findAllFeeds(int page, int size) {
+    public Page<FindAllFeedResponseDto> findAllFeeds(int page, int size) {
         // Feed 데이터를 모두 가져옴 (실제 서비스에서는 페이징 적용 필요)
-        Long userId = (Long) session.getAttribute(SessionConst.LOGIN_USER);
+        Long userId = (Long) session.getAttribute(LOGIN_USER);
+        log.info("111111111111111111111111");
         PageRequest pageRequest = PageRequest.of(page, size);
+        log.info("22222222222222");
         return feedRepository.findFeedsByUserRelationships(userId, pageRequest);
     }
 
     /**
      * 특정 id 뉴스피드 조회
      */
-    public List<FindByUserIdResponseDto> findByUserId(Long userId, int page, int size) {
-        PageRequest pageRequest = PageRequest.of(page, size);
-
-        return feedRepository.findAllByUserId(userId,pageRequest).stream()
-                .map(feed -> FindByUserIdResponseDto.from(feed, photoRepository.findPhotoByFeedId(feed.getId())
-                )).toList();
+    public FindAllFeedsByUserIdDto findByUserId(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("없는 사용자입니다."));
+        List<Feed> feeds = feedRepository.findByUser_Id(user.getId());
+        log.info("feeds : {} ", feeds);
+        return FindAllFeedsByUserIdDto.from(user, feeds);
     }
 
     /**
@@ -85,12 +89,10 @@ public class FeedService {
     /**
      * 내 id 뉴스피드 조회
      */
-    public ProfileUserResponseDto getMyProfile(Long id, int page, int size) {
-        PageRequest pageRequest = PageRequest.of(page, size);
-
+    public ProfileUserResponseDto getMyProfile(Long id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new IllegalStateException("내 정보가 존재하지 않습니다."));
-        List<Feed> feedList = feedRepository.findAllByUserId(user.getId(), pageRequest);
+        List<Feed> feedList = feedRepository .findByUser_Id(user.getId());
 
         return ProfileUserResponseDto.from(user, feedList);
     }

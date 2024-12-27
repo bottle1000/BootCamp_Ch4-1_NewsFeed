@@ -15,7 +15,10 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -26,6 +29,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/feeds")
+@Slf4j
 public class FeedController {
 
     private final FeedService feedService;
@@ -49,7 +53,7 @@ public class FeedController {
     /**
      * 모든 피드조회 <br>
      * 페이지네이션 구현 필요함 <br>
-     * - todo : page랑 size값 받아오기만 했고 구현은 추후에 할 예정
+     * todo : page랑 size값 받아오기만 했고 구현은 추후에 할 예정
      */
     @GetMapping
     public ResponseEntity<List<FindAllFeedResponseDto>> findAllFeeds(

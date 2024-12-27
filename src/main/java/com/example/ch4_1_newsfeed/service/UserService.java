@@ -93,7 +93,7 @@ public class UserService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalStateException("내 정보가 존재하지 않습니다."));
 
-        if (user.getPassword() != request.getPassword()) {
+        if (user.getPassword().equals(request.getPassword())) {
             throw new IllegalStateException("비밀번호가 일치하지 않습니다.");
         }
         userRepository.delete(user);
@@ -117,11 +117,11 @@ public class UserService {
 
             Relationship relationship = new Relationship(following, followed);
             relationshipRepository.save(relationship);
-            return RelationshipResponseDto.of(following,followed);
+            return RelationshipResponseDto.of(following,followed, "you followed ");
 
         }
 
         relationshipRepository.delete(foundRelationship.get());
-        return RelationshipResponseDto.of(following, followed);
+        return RelationshipResponseDto.of(following, followed, "you unfollowed ");
     }
 }
