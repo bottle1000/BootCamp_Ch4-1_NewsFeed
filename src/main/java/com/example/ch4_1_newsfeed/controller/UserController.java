@@ -50,14 +50,19 @@ public class UserController {
     /**
      * 로그아웃 기능
      * @param session
-     * @param servletResponse
+     * @param response
      * @return
      */
     @PostMapping("/logout")
-    public ResponseEntity<String> logout(HttpSession session, HttpServletResponse servletResponse) {
+    public ResponseEntity<String> logout(HttpSession session, HttpServletResponse response) {
+
+        // 세션 무효화
         session.invalidate();
+
+        // 쿠키 삭제
         Cookie cookie = new Cookie(SessionConst.LOGIN_USER, null);
-        servletResponse.addCookie(cookie);
+        cookie.setMaxAge(0);
+        response.addCookie(cookie);
 
         return new ResponseEntity<>("Logout Done", HttpStatus.OK);
     }
@@ -104,9 +109,17 @@ public class UserController {
      * 회원 탈퇴
      */
     @DeleteMapping("/me")
-    public ResponseEntity<String> deleteUser(@Valid @ModelAttribute DeleteUserRequestDto request, HttpSession session) {
+    public ResponseEntity<String> deleteUser(@Valid @ModelAttribute DeleteUserRequestDto request, HttpSession session, HttpServletResponse response) {
         Long userId = (Long) session.getAttribute(SessionConst.LOGIN_USER);
         userService.deleteUser(userId, request);
+
+        // 세션 무효화
+        session.invalidate();
+
+        // 쿠키 삭제
+        Cookie cookie = new Cookie(SessionConst.LOGIN_USER, null);
+        cookie.setMaxAge(0);
+        response.addCookie(cookie);
 
         return ResponseEntity.ok("성공적으로 탈퇴 되었습니다.");
     }

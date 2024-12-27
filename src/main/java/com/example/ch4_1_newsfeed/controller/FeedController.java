@@ -3,10 +3,7 @@ package com.example.ch4_1_newsfeed.controller;
 import com.example.ch4_1_newsfeed.common.SessionConst;
 import com.example.ch4_1_newsfeed.model.dto.feed.request.FeedRequestDto;
 import com.example.ch4_1_newsfeed.model.dto.feed.request.ModifyFeedRequestDto;
-import com.example.ch4_1_newsfeed.model.dto.feed.response.FeedResponseDto;
-import com.example.ch4_1_newsfeed.model.dto.feed.response.FindAllFeedResponseDto;
-import com.example.ch4_1_newsfeed.model.dto.feed.response.FindByUserAndFeedIdResponseDto;
-import com.example.ch4_1_newsfeed.model.dto.feed.response.FindByUserIdResponseDto;
+import com.example.ch4_1_newsfeed.model.dto.feed.response.*;
 import com.example.ch4_1_newsfeed.model.dto.user.response.ProfileUserResponseDto;
 import com.example.ch4_1_newsfeed.service.FeedService;
 import jakarta.servlet.http.HttpSession;
@@ -15,6 +12,8 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,6 +23,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/feeds")
+@Slf4j
 public class FeedController {
 
     private final FeedService feedService;
@@ -50,12 +50,11 @@ public class FeedController {
      * todo : page랑 size값 받아오기만 했고 구현은 추후에 할 예정
      */
     @GetMapping
-    public ResponseEntity<List<FindAllFeedResponseDto>> findAllFeeds(
-        @Valid @NotNull(message = "page가 포함되어야 합니다.") @PositiveOrZero(message = "page는 양의 정수 또는 0여어야 합니다.") @RequestParam int page,
-        @Valid @Positive(message = "size는 양의 정수여야 합니다.") @RequestParam int size
+    public ResponseEntity<Page<FindAllFeedResponseDto>> findAllFeeds(
+        @Valid @NotNull(message = "page가 포함되어야 합니다.") @PositiveOrZero(message = "page는 양의 정수 또는 0여어야 합니다.") @RequestParam(defaultValue = "1") int page,
+        @Valid @Positive(message = "size는 양의 정수여야 합니다.") @RequestParam(defaultValue = "10") int size
     ) {
-
-        List<FindAllFeedResponseDto> allFeeds = feedService.findAllFeeds(page,size);
+        Page<FindAllFeedResponseDto> allFeeds = feedService.findAllFeeds(page,size);
         return new ResponseEntity<>(allFeeds, HttpStatus.OK);
     }
 
@@ -67,38 +66,29 @@ public class FeedController {
      * @param size
      * @return
      */
-    @GetMapping("/{user_id}")
-    public ResponseEntity<List> findByUserId(
+    @GetMapping("/{userId}")
+    public ResponseEntity<FindAllFeedsByUserIdDto> findByUserId(
         @Valid @NotNull @Positive(message = "user_id는 양의 정수여야 합니다.") @PathVariable Long userId,
-        @Valid @NotNull(message = "page가 포함되어야 합니다.") @PositiveOrZero(message = "page는 양의 정수 또는 0이여야 합니다.") @RequestParam int page,
+        @Valid @NotNull(message = "page가 포함되어야 합니다.") @PositiveOrZero(message = "page는 양의 정수 또는 0이여야 합니다.") @RequestParam(defaultValue = "1") int page,
         @Valid @Positive(message = "size는 양의 정수여야 합니다.") @RequestParam(defaultValue = "10") int size
     ) {
 
-        List<FindByUserIdResponseDto> responseDtos = feedService.findByUserId(userId, page, size);
+        FindAllFeedsByUserIdDto responseDtos = feedService.findByUserId(userId);
 
         return new ResponseEntity<>(responseDtos, HttpStatus.OK);
     }
 
     /**
      * 본인 뉴스피드 조회 <br>
-     * 1페이지 10개 피드 출력
+     * todo 전체 출력 되어야 하는데 하나만 출력됨
      * @param session
-     * @param page
-     * @param size
      * @return
      */
     @GetMapping("/me")
     public ResponseEntity<ProfileUserResponseDto> getMyProfile(
-            HttpSession session,
-            @Valid
-            @NotNull(message = "page가 포함되어야 합니다.")
-            @PositiveOrZero(message = "page는 양의 정수 또는 0이여야 합니다.")
-            @RequestParam int page,
-            @Valid
-            @Positive(message = "size는 양의 정수여야 합니다.")
-            @RequestParam(defaultValue = "10") int size) {
+            HttpSession session){
         Long userId = (Long) session.getAttribute(SessionConst.LOGIN_USER);
-        ProfileUserResponseDto myProfile = feedService.getMyProfile(userId, page, size);
+        ProfileUserResponseDto myProfile = feedService.getMyProfile(userId);
 
         return new ResponseEntity<>(myProfile, HttpStatus.OK);
     }
@@ -110,7 +100,7 @@ public class FeedController {
      * @return
      */
     @GetMapping("/{user_id}/{feed_id}")
-    public ResponseEntity findByUserAndFeedId(@PathVariable Long userId, Long feedId) {
+    public ResponseEntity findByUserAndFeedId(@PathVariable(name = "user_id") Long userId, @PathVariable(name = "feed_id") Long feedId) {
 
         FindByUserAndFeedIdResponseDto responseDtos = feedService.findByUserAndFeed(userId, feedId);
 
@@ -124,7 +114,7 @@ public class FeedController {
      * @return
      */
     @PutMapping("/{feed_id}")
-    public ResponseEntity<FeedResponseDto> modifyFeed(@PathVariable("feedId") Long feedId, @RequestBody ModifyFeedRequestDto dto) {
+    public ResponseEntity<FeedResponseDto> modifyFeed(@PathVariable(name = "feed_id") Long feedId, @RequestBody ModifyFeedRequestDto dto) {
         FeedResponseDto feedResponseDto = feedService.updateFeed(feedId, dto);
         return ResponseEntity.ok(feedResponseDto);
     }
@@ -135,8 +125,7 @@ public class FeedController {
      * @return
      */
     @DeleteMapping("/{feed_id}")
-    public ResponseEntity<Void> delete(@PathVariable Long feedId) {
-
+    public ResponseEntity<Void> delete(@PathVariable(name = "feed_id") Long feedId) {
         feedService.delete(feedId);
 
         return new ResponseEntity<>(HttpStatus.OK);
