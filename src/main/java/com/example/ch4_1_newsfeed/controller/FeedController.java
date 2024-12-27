@@ -16,6 +16,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -52,11 +53,11 @@ public class FeedController {
      * - todo : page랑 size값 받아오기만 했고 구현은 추후에 할 예정
      */
     @GetMapping
-    public ResponseEntity<List<FindAllFeedResponseDto>> findAllFeeds(
+    public ResponseEntity<Page<FindAllFeedResponseDto>> findAllFeeds(
         @Valid @ModelAttribute FeedPagingRequestDto dto
         ) {
 
-        List<FindAllFeedResponseDto> allFeeds = feedService.findAllFeeds(dto.getPage(), dto.getSize());
+        Page<FindAllFeedResponseDto> allFeeds = feedService.findAllFeeds(dto.getPage(), dto.getSize());
         return new ResponseEntity<>(allFeeds, HttpStatus.OK);
     }
 
@@ -69,7 +70,7 @@ public class FeedController {
      */
     @GetMapping("/{user_id}")
     public ResponseEntity<List> findByUserId(
-        @PathVariable @Validated @NotNull @Positive(message = "user_id는 양의 정수여야 합니다.") Long userId,
+        @PathVariable(name = "user_id") @Validated @NotNull(message = "id가 포함되어야 합니다") @Positive(message = "user_id는 양의 정수여야 합니다.") Long userId,
         @Valid @ModelAttribute FeedPagingRequestDto dto
     ) {
 
@@ -104,8 +105,8 @@ public class FeedController {
      */
     @GetMapping("/{user_id}/{feed_id}")
     public ResponseEntity findByUserAndFeedId(
-        @PathVariable @Validated @NotNull(message = "id가 포함되어야 합니다") @Positive(message = "id는 양의 정수여야 합니다") Long userId,
-        @PathVariable @Validated @NotNull(message = "id가 포함되어야 합니다") @Positive(message = "id는 양의 정수여야 합니다") Long feedId
+        @PathVariable(name = "user_id") @Validated @NotNull(message = "id가 포함되어야 합니다") @Positive(message = "id는 양의 정수여야 합니다") Long userId,
+        @PathVariable(name = "feed_id") @Validated @NotNull(message = "id가 포함되어야 합니다") @Positive(message = "id는 양의 정수여야 합니다") Long feedId
     ) {
 
         FindByUserAndFeedIdResponseDto responseDtos = feedService.findByUserAndFeed(userId, feedId);
@@ -121,7 +122,7 @@ public class FeedController {
      */
     @PutMapping("/{feed_id}")
     public ResponseEntity<FeedResponseDto> modifyFeed(
-        @PathVariable("feed_id") @Validated @NotNull(message = "id가 포함되어야 합니다") @Positive(message = "id는 양의 정수여야 합니다") Long feedId,
+        @PathVariable(name = "feed_id") @Validated @NotNull(message = "id가 포함되어야 합니다") @Positive(message = "id는 양의 정수여야 합니다") Long feedId,
         @Valid @RequestBody ModifyFeedRequestDto dto
     ) {
         FeedResponseDto feedResponseDto = feedService.updateFeed(feedId, dto);
@@ -133,9 +134,9 @@ public class FeedController {
      * @param feedId
      * @return
      */
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{feed_id}")
     public ResponseEntity<Void> delete(
-        @PathVariable @Validated @NotNull(message = "id가 포함되어야 합니다") @Positive(message = "id는 양의 정수여야 합니다") Long feedId
+        @PathVariable(name = "feed_id") @Validated @NotNull(message = "id가 포함되어야 합니다") @Positive(message = "id는 양의 정수여야 합니다") Long feedId
     ) {
 
         feedService.delete(feedId);
