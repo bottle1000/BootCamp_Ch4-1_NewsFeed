@@ -61,8 +61,11 @@ public class FeedService {
         Long userId = (Long) session.getAttribute(LOGIN_USER);
         log.info("111111111111111111111111");
         PageRequest pageRequest = PageRequest.of(page, size);
-        log.info("22222222222222");
-        return feedRepository.findFeedsByUserRelationships(userId, pageRequest);
+        Page<FindAllFeedResponseDto> dtos = feedRepository.findFeedsByUserRelationships(userId, pageRequest);
+        for(FindAllFeedResponseDto dto : dtos) {
+            dto.setPhotos(photoRepository.findPhotoUrlByFeedIds(dto.getFeedId()));
+        }
+        return dtos;
     }
 
     /**

@@ -13,4 +13,7 @@ public interface PhotoRepository extends JpaRepository<Photo, Long> {
 
     @Query("select p from Photo p where p.feed.id in :feedIds")
     List<Photo> findPhotosByFeedIds(List<Long> feedIds);
+
+    @Query("select p.URL from Photo p where p.feed.id = :feedId")
+    List<String> findPhotoUrlByFeedIds(Long feedId);
 }

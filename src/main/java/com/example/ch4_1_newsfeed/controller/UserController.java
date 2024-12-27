@@ -20,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
@@ -128,13 +129,13 @@ public class UserController {
     /**
      * 팔로우/언팔로우
      */
-    @PostMapping("/{id}")
+    @PostMapping("/{user_id}")
     public ResponseEntity<RelationshipResponseDto> follow(
-            @Valid @NotNull(message = "id가 포함되어야 합니다.") @Positive(message = "id는 양의 정수여야 합니다.") @PathVariable Long id,
+            @PathVariable(name = "user_id") @Validated @NotNull(message = "id가 포함되어야 합니다.") @Positive(message = "id는 양의 정수여야 합니다.") Long userId,
             HttpSession session
     ) {
 
-        RelationshipResponseDto following = userService.follow(id, session);
+        RelationshipResponseDto following = userService.follow(userId, session);
 
         return new ResponseEntity<>(following, HttpStatus.OK);
     }

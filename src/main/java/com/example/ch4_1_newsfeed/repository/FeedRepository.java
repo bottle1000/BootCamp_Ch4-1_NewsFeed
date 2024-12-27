@@ -31,23 +31,25 @@ public interface FeedRepository extends JpaRepository<Feed, Long> {
      */
     Feed findByIdAndId(Long userId, Long feedId);
 
-    /**
-     * todo 2track
-     * -> following_id 컬럼이 followee_id로 잘못 작성되어 있었음
-     */
-    @NativeQuery(
-        value = "select " +
-            "f.id as feed_id, f.user_id as user_id, f.contents as contents, f.created_at as createdAt, GROUP_CONCAT(p.URL) as photos " +
-            "from Feed f " +
-            "left join Photo p on p.feed_id = f.id " +
-            "LEFT JOIN" +
-                "Relationship r ON r.following_id = f.user_id" +
-                "WHERE f.user_id = :userId" +
-            "group by f.id " +
-            "order by created_at DESC",
-        sqlResultSetMapping = "FindAllFeedResponseDtoMapping")
-
-    Page<FindAllFeedResponseDto> findFeedsByUserRelationships(@Param("userId") Long userId, Pageable pageable);
+//    @NativeQuery(
+//        value = "select " +
+//            "f.id as feed_id, f.user_id as user_id, f.contents as contents, f.createdAt as created_at, GROUP_CONCAT(p.URL) as photos " +
+//            "from Feed f " +
+//            "left join Photo p on p.feed_id = f.id " +
+//            "left join Relationship r on r.following_id = f.user_id and r.follower_id = :userId " +
+//            "group by f.id " +
+//            "order by f.createdAt DESC",
+//        sqlResultSetMapping = "FindAllFeedResponseDtoMapping")
+    @Query(
+        "select new com.example.ch4_1_newsfeed.model.dto.feed.response.FindAllFeedResponseDto("
+        + "f.id, u.id, f.contents, f.createdAt) "
+        + "from Feed f "
+        + "join f.user u "
+        + "join Relationship r on f.user.id = r.followee.id and r.follower.id = :userId "
+        + "group by f.id "
+        + "order by f.createdAt desc"
+    )
+    Page<FindAllFeedResponseDto> findFeedsByUserRelationships(Long userId, Pageable pageable);
 
 }
 
