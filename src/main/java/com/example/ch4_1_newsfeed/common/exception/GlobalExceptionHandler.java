@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingPathVariableException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.method.annotation.HandlerMethodValidationException;
@@ -81,6 +82,14 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(IncorrectResultSizeDataAccessException.class)
     public ResponseEntity<Map<String, String>> handleIncorrectResultSizeDataAccessException(IncorrectResultSizeDataAccessException e) {
         return createMessageResponseEntity(HttpStatus.CONFLICT, "조회 결과가 예상보다 많습니다.");
+    }
+
+    /**
+     * path variable이 없거나 읽을 수 없을 때 발생하는 예외 처리
+     */
+    @ExceptionHandler(MissingPathVariableException.class)
+    public ResponseEntity<Map<String, String>> handleMissingPathVariableException(MissingPathVariableException e) {
+        return createMessageResponseEntity(HttpStatus.BAD_REQUEST, "path variable이 포함되어야 합니다.");
     }
 
     /**

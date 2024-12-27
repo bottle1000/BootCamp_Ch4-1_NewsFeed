@@ -1,6 +1,7 @@
 package com.example.ch4_1_newsfeed.controller;
 
 import com.example.ch4_1_newsfeed.common.SessionConst;
+import com.example.ch4_1_newsfeed.model.dto.feed.request.FeedPagingRequestDto;
 import com.example.ch4_1_newsfeed.model.dto.feed.request.FeedRequestDto;
 import com.example.ch4_1_newsfeed.model.dto.feed.request.ModifyFeedRequestDto;
 import com.example.ch4_1_newsfeed.model.dto.feed.response.FeedResponseDto;
@@ -8,7 +9,7 @@ import com.example.ch4_1_newsfeed.model.dto.feed.response.FindAllFeedResponseDto
 import com.example.ch4_1_newsfeed.model.dto.feed.response.FindByUserAndFeedIdResponseDto;
 import com.example.ch4_1_newsfeed.model.dto.feed.response.FindByUserIdResponseDto;
 import com.example.ch4_1_newsfeed.model.dto.user.response.ProfileUserResponseDto;
-import com.example.ch4_1_newsfeed.dto.feed.request.FeedPagingRequestDto;
+
 import com.example.ch4_1_newsfeed.service.FeedService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -68,7 +69,7 @@ public class FeedController {
      */
     @GetMapping("/{user_id}")
     public ResponseEntity<List> findByUserId(
-        @Valid @NotNull @Positive(message = "user_id는 양의 정수여야 합니다.") @PathVariable Long userId,
+        @PathVariable @Validated @NotNull @Positive(message = "user_id는 양의 정수여야 합니다.") Long userId,
         @Valid @ModelAttribute FeedPagingRequestDto dto
     ) {
 
